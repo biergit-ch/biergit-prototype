@@ -4,4 +4,8 @@
 - Node JS / Express
 - React App
 
-This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
+## Node JS / Express
+
+Deploy to Heroku using `git subtree push --prefix server heroku master` from main app folder
+
+_This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app)._
