@@ -2,6 +2,7 @@ import * as React from 'react';
 import './App.css';
 
 import logo from './logo.svg';
+import GroupList from './GroupList';
 
 class App extends React.Component {
   public render() {
@@ -14,6 +15,7 @@ class App extends React.Component {
         <p className="App-intro">
           Hello fellow biergitter
         </p>
+        <GroupList />
       </div>
     );
   }
