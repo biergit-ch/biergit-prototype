@@ -50,7 +50,7 @@ export default class GroupList extends React.Component {
   // our first get method that uses our backend api to
   // fetch data from our data base
   getDataFromDb = () => {
-    fetch(process.env.HEROKU_API_URL + '/api/getData')
+    fetch(process.env.REACT_APP_HEROKU_API_URL + '/api/getData')
       .then(data => data.json())
       .then(res => this.setState({ data: res.data }));
   };
@@ -64,7 +64,7 @@ export default class GroupList extends React.Component {
       ++idToBeAdded;
     }
 
-    axios.post(process.env.HEROKU_API_URL + '/api/putData', {
+    axios.post(process.env.REACT_APP_HEROKU_API_URL + '/api/putData', {
       id: idToBeAdded,
       message: message
     });
@@ -80,7 +80,7 @@ export default class GroupList extends React.Component {
       }
     });
 
-    axios.delete(process.env.HEROKU_API_URL + '/api/deleteData', {
+    axios.delete(process.env.REACT_APP_HEROKU_API_URL + '/api/deleteData', {
       data: {
         id: objIdToDelete
       }
@@ -97,7 +97,7 @@ export default class GroupList extends React.Component {
       }
     });
 
-    axios.post(process.env.HEROKU_API_URL + '/api/updateData', {
+    axios.post(process.env.REACT_APP_HEROKU_API_URL + '/api/updateData', {
       id: objIdToUpdate,
       update: { message: updateToApply }
     });
