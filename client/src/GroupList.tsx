@@ -111,7 +111,7 @@ export default class GroupList extends React.Component {
           {data.length <= 0
             ? 'NO DB ENTRIES YET'
             : data.map(dat => (
-                <li style={{ padding: '10px' }} key={this.state.message}>
+                <li style={{ padding: '10px' }} key={dat.id}>
                   <span style={{ color: 'gray' }}> id: </span> {dat.id} <br />
                   <span style={{ color: 'gray' }}> data: </span>
                   {dat.message}
