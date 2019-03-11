@@ -10,7 +10,7 @@ const app = express();
 const router = express.Router();
 
 // Set up a whitelist and check against it:
-var whitelist = ['http://localhost:3000']
+var whitelist = ['http://localhost:3000', 'https://biergit.it-wd.ch']
 var corsOptions = {
   origin: function (origin, callback) {
     if (whitelist.indexOf(origin) !== -1) {
