@@ -9,10 +9,15 @@ ___
 > - Node JS / Express
 > - React App
 
+## Technologies to test
+
+- [ ] Meteor
+- [ ] Firebase
+
 ## Run App
 
 1. install node modules
-    - root    
+    - root
     - client
     - server
 
