@@ -2,7 +2,7 @@ import * as React from 'react';
 import './App.css';
 
 import logo from './logo.svg';
-import GroupList from './GroupList';
+import { GroupList, UserList } from './components';
 
 class App extends React.Component {
   public render() {
@@ -12,9 +12,8 @@ class App extends React.Component {
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to Biergit</h1>
         </header>
-        <p className="App-intro">
-          Hello fellow biergitter
-        </p>
+        <p className="App-intro">Hello fellow biergitter</p>
+        <UserList name="CurrentUser" />
         <GroupList />
       </div>
     );
