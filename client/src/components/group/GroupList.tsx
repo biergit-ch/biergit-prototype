@@ -28,8 +28,8 @@ export class GroupList extends React.Component {
   componentDidMount() {
     this.getDataFromDb();
     if (!this.state.intervalIsSet) {
-      let interval = setInterval(this.getDataFromDb, 1000);
-      this.setState({ intervalIsSet: interval });
+      //let interval = setInterval(this.getDataFromDb, 1000);
+      //this.setState({ intervalIsSet: interval });
     }
   }
 
@@ -106,7 +106,8 @@ export class GroupList extends React.Component {
   render() {
     const { data } = this.state;
     return (
-      <div>
+        <div>
+        <h1>GroupList</h1>
         <ul>
           {data.length <= 0
             ? 'NO DB ENTRIES YET'

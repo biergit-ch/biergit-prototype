@@ -6,6 +6,11 @@ interface UserListProps {
 
 export class UserList extends React.Component<UserListProps> {
   render() {
-    return <h1>Hello, {this.props.name}</h1>;
+    return (
+      <div>
+        <h1>UserList</h1>
+        <h3>Hello, {this.props.name}</h3>
+      </div>
+      );
   }
 }
