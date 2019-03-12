@@ -1,14 +1,14 @@
 import * as React from 'react';
 import './App.css';
 
-import { GroupList, UserList, ToolBar } from './components';
-
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Paper from '@material-ui/core/Paper';
 import amber from '@material-ui/core/colors/amber';
 import red from '@material-ui/core/colors/red';
+
+import { ToolBar } from '..';
+import { Auth0Authentication } from '../../auth/Auth0Authentication';
+import { History } from 'history';
 
 const theme = createMuiTheme({
   palette: {
@@ -21,33 +21,28 @@ const theme = createMuiTheme({
   }
 });
 
-class App extends React.Component {
+export interface AppProps {
+  auth: Auth0Authentication;
+  history: History;
+}
+
+const styles = {
+  root: "",
+  grow: "",
+  menuButton: ""
+};
+
+export class App extends React.Component<AppProps> {
   public render() {
     return (
       <div className="App">
         <React.Fragment>
           <CssBaseline />
           <MuiThemeProvider theme={theme}>
-            <ToolBar />
-            <div style={{ padding: 20 }}>
-              <Grid container spacing={24}>
-                <Grid item xs={3}>
-                  <Paper>
-                    <UserList name="CurrentUser" />
-                  </Paper>
-                </Grid>
-                <Grid item xs={3}>
-                  <Paper>
-                    <GroupList />
-                  </Paper>
-                </Grid>
-              </Grid>
-            </div>
+            <ToolBar history={this.props.history} auth={this.props.auth} classes={styles}/>
           </MuiThemeProvider>
         </React.Fragment>
       </div>
     );
   }
 }
-
-export default App;

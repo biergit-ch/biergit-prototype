@@ -26,7 +26,7 @@ export class UserList extends React.Component<UserListProps> {
 
   getData() {
     axios
-      .get<AxiosResponse>(process.env.REACT_APP_HEROKU_API_URL + '/api/users')
+      .get<AxiosResponse>(process.env.REACT_APP_API_URI + '/api/users')
       .then(res => this.setState({ userList: res.data.data }));
   }
 

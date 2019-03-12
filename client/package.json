@@ -4,11 +4,17 @@
   "private": true,
   "dependencies": {
     "@material-ui/core": "^3.9.2",
+    "@material-ui/icons": "^3.0.2",
     "@types/dotenv": "^6.1.0",
+    "@types/react-router-dom": "^4.3.1",
+    "auth0-js": "^9.10.0",
+    "autobind-decorator": "^2.4.0",
     "axios": "^0.18.0",
     "dotenv": "^6.2.0",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
+    "react-router": "^4.3.1",
+    "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
     "typeface-roboto": "0.0.54"
   },
@@ -19,8 +25,10 @@
     "eject": "react-scripts-ts eject"
   },
   "devDependencies": {
+    "@types/auth0-js": "^8.11.11",
+    "@types/history": "^4.7.2",
     "@types/jest": "^24.0.11",
-    "@types/node": "^11.11.0",
+    "@types/node": "^11.11.2",
     "@types/react": "^16.8.7",
     "@types/react-dom": "^16.8.2",
     "typescript": "^3.3.3333"
