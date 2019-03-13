@@ -62,7 +62,7 @@ export const UserList = withStyles(styles)(
 
     getData() {
       axios
-        .get<AxiosResponse>(process.env.REACT_APP_API_URI + '/api/users')
+        .get<AxiosResponse>(process.env.REACT_APP_API_URI + '/users')
         .then(res => this.setState({ userList: res.data.data }));
     }
 
