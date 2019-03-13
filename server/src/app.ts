@@ -35,6 +35,7 @@ import { IUserModel } from './models/user'; //import IUserModel
 
 //schemas
 import { userSchema } from './schemas/user'; //import userSchema
+import { APIRoute } from './routes/apiRoute';
 
 /**
  * The server.
@@ -164,6 +165,9 @@ export class App {
  
     //IndexRoute
     IndexRoute.create(router);
+
+    //APIRoute
+    APIRoute.create(router);
 
     //use router middleware
     this.app.use('/api', router);
