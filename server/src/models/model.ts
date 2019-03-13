@@ -3,4 +3,5 @@ import { IUserModel } from "./user";
 
 export interface IModel {
   user: Model<IUserModel>;
+  group: Model<IGroupModel>;
 }

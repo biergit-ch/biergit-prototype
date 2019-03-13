@@ -35,6 +35,12 @@ import { IUserModel } from './models/user'; //import IUserModel
 
 //schemas
 import { userSchema } from './schemas/user'; //import userSchema
+<<<<<<< Updated upstream
+=======
+import { APIRoute } from './routes/apiRoute';
+import { groupSchema } from './schemas/group';
+import { IGroupModel } from './models/group';
+>>>>>>> Stashed changes
 
 /**
  * The server.
@@ -132,7 +138,11 @@ export class App {
 
     //create models
     this.model.user = connection.model<IUserModel>('User', userSchema);
+    this.model.group = connection.model<IGroupModel>('Group', groupSchema);
 
+    //use router middleware
+    this.app.use(cors(corsOptions));
+ 
     // catch 404 and forward to error handler
     this.app.use(function(
       err: any,
@@ -158,10 +168,6 @@ export class App {
   private routes() {
     let router: express.Router;
     router = express.Router();
-
-    //use router middleware
-    router.use(cors(corsOptions));
- 
     //IndexRoute
     IndexRoute.create(router);
 
