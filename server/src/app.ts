@@ -23,19 +23,18 @@ var corsOptions = {
   }
 };
 
-//routes
-import { IndexRoute } from './routes/index';
-
-//interfaces
-import { IUser } from './interfaces/user'; //import IUser
-
 //models
-import { IModel } from './models/model'; //import IModel
-import { IUserModel } from './models/user'; //import IUserModel
+import { IModel } from './models/model';
+import { IUserModel } from './models/user'; 
+import { IGroupModel } from './models/group';
 
 //schemas
-import { userSchema } from './schemas/user'; //import userSchema
+import { userSchema } from './schemas/user';
+import { groupSchema } from './schemas/group';
+
+//routes
 import { APIRoute } from './routes/apiRoute';
+import { IndexRoute } from './routes/index';
 
 /**
  * The server.
@@ -133,7 +132,11 @@ export class App {
 
     //create models
     this.model.user = connection.model<IUserModel>('User', userSchema);
+    this.model.group = connection.model<IGroupModel>('Group', groupSchema);
 
+    //use router middleware
+    this.app.use(cors(corsOptions));
+ 
     // catch 404 and forward to error handler
     this.app.use(function(
       err: any,
@@ -159,10 +162,6 @@ export class App {
   private routes() {
     let router: express.Router;
     router = express.Router();
-
-    //use router middleware
-    router.use(cors(corsOptions));
- 
     //IndexRoute
     IndexRoute.create(router);
 
