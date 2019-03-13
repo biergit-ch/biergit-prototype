@@ -89,7 +89,7 @@ export const GroupList = withStyles(styles)(
     // our first get method that uses our backend api to
     // fetch data from our data base
     getDataFromDb = () => {
-      fetch(process.env.REACT_APP_API_URI + '/getData')
+      fetch(process.env.REACT_APP_API_URI + '/groups')
         .then(data => data.json())
         .then(res => this.setState({ data: res.data }));
     };
@@ -103,7 +103,7 @@ export const GroupList = withStyles(styles)(
         ++idToBeAdded;
       }
 
-      axios.post(process.env.REACT_APP_API_URI + '/putData', {
+      axios.post(process.env.REACT_APP_API_URI + '/groups', {
         id: idToBeAdded,
         message: message
       });
@@ -119,7 +119,7 @@ export const GroupList = withStyles(styles)(
         }
       });
 
-      axios.delete(process.env.REACT_APP_API_URI + '/deleteData', {
+      axios.delete(process.env.REACT_APP_API_URI + '/groups', {
         data: {
           id: objIdToDelete
         }
@@ -136,7 +136,7 @@ export const GroupList = withStyles(styles)(
         }
       });
 
-      axios.post(process.env.REACT_APP_API_URI + '/updateData', {
+      axios.post(process.env.REACT_APP_API_URI + '/groups', {
         id: objIdToUpdate,
         update: { message: updateToApply }
       });
