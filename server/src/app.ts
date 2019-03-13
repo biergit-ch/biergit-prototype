@@ -1,6 +1,7 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
 import logger from 'morgan';
+import cors from 'cors';
 import * as path from 'path';
 import errorHandler = require('errorhandler');
 import methodOverride = require('method-override');
@@ -99,8 +100,10 @@ export class App {
   public config() {
     // this is our MongoDB database
     const MONGODB_CONNECTION: string = process.env.MONGODB_URL;
+    
     //add static paths
     this.app.use(express.static(path.join(__dirname, 'public')));
+    
     //mount logger
     this.app.use(logger('dev'));
 
@@ -156,6 +159,9 @@ export class App {
     let router: express.Router;
     router = express.Router();
 
+    //use router middleware
+    router.use(cors(corsOptions));
+ 
     //IndexRoute
     IndexRoute.create(router);
 
