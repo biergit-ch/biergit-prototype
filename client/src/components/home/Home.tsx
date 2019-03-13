@@ -22,7 +22,7 @@ export class Home extends Component<HomeProps, {}> {
 
   render() {
     return (
-        <div style={{ padding: 20 }}>
+      <div style={{ padding: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={3}>
             <Paper>

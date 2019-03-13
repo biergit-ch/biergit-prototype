@@ -16,7 +16,7 @@
     "react-router": "^4.3.1",
     "react-router-dom": "^4.3.1",
     "react-scripts-ts": "3.1.0",
-    "typeface-roboto": "0.0.54"
+    "typeface-roboto": "^0.0.54"
   },
   "scripts": {
     "start": "react-scripts-ts start",
