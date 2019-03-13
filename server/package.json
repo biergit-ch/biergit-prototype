@@ -2,18 +2,50 @@
   "name": "biergit-prototype-server",
   "version": "1.0.0",
   "description": "Express Server",
-  "main": "index.js",
+  "main": "dist/server.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
+    "lint": "tslint -c tslint.json 'src/**/*.ts'",
+    "start": "npm run serve",
+    "serve": "node dist/server.js",
+    "watch-node": "nodemon dist/server.js",
+    "watch-ts": "tsc -w"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.18.3",
-    "cors": "^2.8.5",
+    "cookie-parser": "^1.4.4",
+    "dotenv": "^7.0.0",
+    "errorhandler": "^1.5.0",
     "express": "^4.16.4",
-    "mongoose": "^5.4.18",
-    "morgan": "^1.9.1"
+    "grunt-cli": "^1.3.2",
+    "grunt-contrib-uglify": "4.0.0",
+    "method-override": "^3.0.0",
+    "mongoose": "^5.4.19",
+    "morgan": "^1.9.1",
+    "pug": "^2.0.3",
+    "q": "^1.5.1"
+  },
+  "devDependencies": {
+    "@types/body-parser": "1.17.0",
+    "@types/chai": "^4.1.7",
+    "@types/cookie-parser": "^1.4.1",
+    "@types/errorhandler": "0.0.32",
+    "@types/method-override": "0.0.31",
+    "@types/mocha": "^5.2.6",
+    "@types/mongodb": "^3.1.22",
+    "@types/mongoose": "^5.3.21",
+    "@types/morgan": "^1.7.35",
+    "grunt": "^1.0.3",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-watch": "^1.1.0",
+    "grunt-ts": "^6.0.0-beta.22",
+    "nodemon": "^1.18.10",
+    "prettier": "^1.16.4",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.3.3333"
   }
 }
