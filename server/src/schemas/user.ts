@@ -6,7 +6,7 @@ export var userSchema: Schema = new Schema({
   firstName: String,
   lastName: String
 });
-userSchema.pre("save", function(next) {
+userSchema.pre("save", (next) => {
   if (!this.createdAt) {
     this.createdAt = new Date();
   }
