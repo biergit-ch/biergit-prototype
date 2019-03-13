@@ -35,7 +35,7 @@ const Routes: React.SFC<{}> = () => {
             path="/profile"
             render={props =>
               !authenticated ? (
-                <Redirect to="/home" />
+                <Redirect to="/" />
               ) : (
                 <Profile auth={auth} {...props} />
               )
@@ -45,7 +45,7 @@ const Routes: React.SFC<{}> = () => {
             path="/admin"
             render={props =>
               !authenticated || !userHasScopes(['write:messages']) ? (
-                <Redirect to="/home" />
+                <Redirect to="/" />
               ) : (
                 <Admin auth={auth} {...props} />
               )

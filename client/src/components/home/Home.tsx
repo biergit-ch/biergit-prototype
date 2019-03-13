@@ -24,13 +24,13 @@ export class Home extends Component<HomeProps, {}> {
     return (
       <div style={{ padding: 20 }}>
         <Grid container spacing={24}>
-          <Grid item xs={3}>
-            <Paper>
+          <Grid item xs={6}>
+            <Paper style={{padding:10}}>
               <UserList name="CurrentUser" />
             </Paper>
           </Grid>
-          <Grid item xs={3}>
-            <Paper>
+          <Grid item xs={6}>
+            <Paper style={{padding:10}}>
               <GroupList />
             </Paper>
           </Grid>

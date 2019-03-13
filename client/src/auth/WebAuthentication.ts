@@ -3,6 +3,7 @@ import history from '../utils/History';
 import { Auth0Authentication } from './Auth0Authentication';
 import { Auth0DecodedHash, Auth0Error, WebAuth } from 'auth0-js';
 import { UserProfile } from '../models';
+
 /**
  * Web based Auth0 authentication
  *
@@ -11,6 +12,13 @@ import { UserProfile } from '../models';
  * @implements {Auth0Authentication}
  */
 export class WebAuthentication implements Auth0Authentication {
+  /**
+   * @property
+   * @type {number}
+   * @memberof WebAuthentication
+   */
+  // tslint:disable-next-line:no-any
+  tokenRenewalTimeout: number;
   /**
    * @property
    * @readonly
@@ -57,6 +65,13 @@ export class WebAuthentication implements Auth0Authentication {
    * @memberof WebAuthentication
    */
   userProfile: UserProfile | null;
+
+  /**
+   * Creates instance of web authentication using Auth0
+   */
+  constructor() {
+    this.scheduleRenewal();
+  }
 
   /**
    * Get user profile from local storage
@@ -133,11 +148,50 @@ export class WebAuthentication implements Auth0Authentication {
     history.replace('/home');
   }
 
+  /**
+   * @see {@link Auth0Authentication#renewToken}
+   * @memberof WebAuthentication
+   */
+  renewToken(): void {
+    this.auth0.renewAuth(
+      {
+        redirectUri: process.env.REACT_APP_AUTH0_CALLBACK_URI,
+        usePostMessage: true,
+        postMessageDataType: 'auth0:silent-authentication',
+      },
+      (err: Auth0Error, result: Auth0DecodedHash) => {
+        if (err) {
+          alert(
+            `Could not get a new token using silent authentication (${
+              err.error
+            }).`,
+          );
+        } else {
+          this.setSession(result);
+          alert(`Successfully renewed auth!`);
+        }
+      },
+    );
+  }
+
   @autobind
   userHasScopes(scopes: string[]): boolean {
     const grantedScopes = JSON.parse(localStorage.getItem('scopes')!).split(
       ' ',
     );
     return scopes.every(scope => grantedScopes.includes(scope));
+  }
+
+  /**
+   * Reschedule token reneval
+   * @private
+   * @memberof WebAuthentication
+   */
+  private scheduleRenewal(): void {
+    const expiresAt = JSON.parse(localStorage.getItem('expires_at')!);
+    const delay = expiresAt - Date.now();
+    if (delay > 0) {
+      this.tokenRenewalTimeout = window.setTimeout(() => this.renewToken(), delay);
+    }
   }
 }
