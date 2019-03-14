@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { UserModel } from 'src/models';
-import axios, { AxiosResponse } from 'axios';
-import { User } from './User';
+import * as React from "react";
+import { UserModel } from "src/models";
+import axios, { AxiosResponse } from "axios";
+import { User } from "./User";
 import {
   Typography,
   Grid,
@@ -9,14 +9,17 @@ import {
   WithStyles,
   Theme,
   createStyles,
-  Paper
-} from '@material-ui/core';
+  Paper,
+  Button
+} from "@material-ui/core";
+import { connect } from "react-redux";
+import { openUserDialog } from "src/actions";
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap'
+      display: "flex",
+      flexWrap: "wrap"
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -31,7 +34,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary
     }
   });
@@ -42,6 +45,7 @@ interface IState {
 
 export interface UserListProps extends WithStyles<typeof styles> {
   name: string;
+  openDialog: any;
 }
 export const UserList = withStyles(styles)(
   class UserList extends React.Component<
@@ -53,7 +57,9 @@ export const UserList = withStyles(styles)(
 
     constructor(props: UserListProps) {
       super(props);
-      this.state = { userList: new Array<UserModel>() };
+      this.state = {
+        userList: new Array<UserModel>()
+      };
     }
 
     public componentDidMount() {
@@ -62,8 +68,12 @@ export const UserList = withStyles(styles)(
 
     getData() {
       axios
-        .get<AxiosResponse>(process.env.REACT_APP_API_URI + '/users')
+        .get<AxiosResponse>(process.env.REACT_APP_API_URI + "/users")
         .then(res => this.setState({ userList: res.data.data }));
+    }
+
+    openUserDialog() {
+      this.props.openDialog(true);
     }
 
     render() {
@@ -89,9 +99,27 @@ export const UserList = withStyles(styles)(
                 )}
               </Paper>
             </Grid>
+            <Grid item xs={12}>
+              <Button variant="contained" onClick={() => this.openUserDialog()}>
+                ADD
+              </Button>
+            </Grid>
           </Grid>
         </div>
       );
     }
   }
 );
+
+// const mapStateToProps = (state, ownProps) => ({
+//   // ... computed data from state and optionally ownProps
+// })
+
+// const mapDispatchToProps = {
+//   // ... normally is an object full of action creators
+// }
+
+export default connect(
+  null,
+  { openUserDialog }
+)(UserList);

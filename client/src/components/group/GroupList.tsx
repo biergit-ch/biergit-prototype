@@ -47,12 +47,12 @@ interface IState {
   objectToUpdate: any;
   updateToApply: any;
 }
-export interface GroupListProps extends WithStyles<typeof styles> {}
+export interface GroupListProps extends WithStyles<typeof styles> { }
 export const GroupList = withStyles(styles)(
   class GroupList extends React.Component<
     GroupListProps & WithStyles<keyof typeof styles>,
     IState
-  > {
+    > {
     state: IState = {
       data: [],
       id: 0,
@@ -156,17 +156,17 @@ export const GroupList = withStyles(styles)(
                 {data.length <= 0 ? (
                   <Typography variant="body1">NO GROUPS</Typography>
                 ) : (
-                  <ul>
-                    {data.map(dat => (
-                      <li style={{ padding: '10px' }} key={dat.id}>
-                        <span style={{ color: 'gray' }}> id: </span> {dat.id}{' '}
-                        <br />
-                        <span style={{ color: 'gray' }}> data: </span>
-                        {dat.message}
-                      </li>
-                    ))}
-                  </ul>
-                )}
+                    <ul>
+                      {data.map(dat => (
+                        <li style={{ padding: '10px' }} key={dat.id}>
+                          <span style={{ color: 'gray' }}> id: </span> {dat.id}{' '}
+                          <br />
+                          <span style={{ color: 'gray' }}> data: </span>
+                          {dat.message}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
               </Paper>
             </Grid>
             <Grid item xs={12}>
