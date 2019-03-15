@@ -12,6 +12,7 @@ import {
   Paper,
   Button
 } from "@material-ui/core";
+import { UserDialog } from "./UserDialog";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -39,6 +40,7 @@ const styles = (theme: Theme) =>
 
 interface IState {
   userList: Array<UserModel>;
+  openUserDialog: boolean;
 }
 
 export interface UserListProps extends WithStyles<typeof styles> {
@@ -56,7 +58,8 @@ export const UserList = withStyles(styles)(
     constructor(props: UserListProps) {
       super(props);
       this.state = {
-        userList: new Array<UserModel>()
+        userList: new Array<UserModel>(),
+        openUserDialog: false
       };
     }
 
@@ -70,9 +73,27 @@ export const UserList = withStyles(styles)(
         .then(res => this.setState({ userList: res.data.data }));
     }
 
-    openUserDialog() {
-
+    addUser(userName: string, nickName: string) {
+      axios
+        .post<AxiosResponse>(process.env.REACT_APP_API_URI + "/users", {
+          userName,
+          nickName
+        })
+        .then(res => this.setState({ userList: res.data.data }));
     }
+
+    openUserDialog() {
+      this.setState({
+        openUserDialog: true
+      });
+    }
+
+    callback = (userName: string, nickName: string) => {
+      this.setState({
+        openUserDialog: false
+      });
+      this.addUser(userName, nickName);
+    };
 
     render() {
       const { classes } = this.props;
@@ -103,17 +124,31 @@ export const UserList = withStyles(styles)(
               </Button>
             </Grid>
           </Grid>
+          <UserDialog
+            open={this.state.openUserDialog}
+            onClose={this.callback}
+          />
         </div>
       );
     }
   }
 );
 
-// const mapStateToProps = (state, ownProps) => ({
-//   // ... computed data from state and optionally ownProps
-// })
-
-// const mapDispatchToProps = {
-//   // ... normally is an object full of action creators
+// export interface AppProps extends WithStyles<typeof styles> {
+//   auth: Auth0Authentication;
+//   userActions: UserActions;
+//   groupActions: GroupActions;
 // }
 
+// const mapStateToProps = (state: AppState) => ({
+//   authenticated: state.authenticated,
+//   users: state.users,
+//   groups: state.groups
+// });
+
+// const mapDispatchtoProps = (
+//   dispatch: Dispatch
+// ): Pick<AppProps, 'userActions' | 'groupActions'> => ({
+//   userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch),
+//   groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch)
+// });
