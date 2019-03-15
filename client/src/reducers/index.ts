@@ -1,31 +1,11 @@
-import { combineReducers } from "redux";
-import { ADD_GROUP, ADD_USER } from 'src/actions/actionTypes';
+import { combineReducers } from 'redux';
+import { RootState } from './state';
+import { userReducer } from './users';
+import { groupReducer } from './groups';
 
-function userGroups(state = [], action: any) {
-  switch (action.type) {
-    case ADD_GROUP:
-      return [
-        ...state,
-        {
-          text: action.text,
-          completed: false
-        }
-      ];
-    case ADD_USER:
-      return [
-        ...state,
-        {
-          text: action.text,
-          completed: false
-        }
-      ];
-    default:
-      return state;
-  }
-}
+export { RootState };
 
-export const rootReducers = combineReducers({
-    userGroups
+export const rootReducer = combineReducers<RootState>({
+  users: userReducer as any,
+  groups: groupReducer as any
 });
-
-

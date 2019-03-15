@@ -12,8 +12,6 @@ import {
   Paper,
   Button
 } from "@material-ui/core";
-import { connect } from "react-redux";
-import { openUserDialog } from "src/actions";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -73,7 +71,7 @@ export const UserList = withStyles(styles)(
     }
 
     openUserDialog() {
-      this.props.openDialog(true);
+
     }
 
     render() {
@@ -82,7 +80,7 @@ export const UserList = withStyles(styles)(
         <div className={classes.root}>
           <Grid container spacing={24}>
             <Grid item xs={12}>
-              <Typography variant="headline">Users</Typography>
+              <Typography variant="h5">Users</Typography>
               <Typography>Hello, {this.props.name}</Typography>
               <Typography>Below a list of all users</Typography>
             </Grid>
@@ -119,7 +117,3 @@ export const UserList = withStyles(styles)(
 //   // ... normally is an object full of action creators
 // }
 
-export default connect(
-  null,
-  { openUserDialog }
-)(UserList);

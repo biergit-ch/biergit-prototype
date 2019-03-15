@@ -26,7 +26,7 @@ export class Home extends Component<HomeProps, {}> {
         <Grid container spacing={24}>
           <Grid item xs={6}>
             <Paper style={{padding:10}}>
-              <UserList name="CurrentUser" />
+              <UserList name='CurrentUser' openDialog='false'  />
             </Paper>
           </Grid>
           <Grid item xs={6}>

@@ -1,33 +1,35 @@
 import * as React from 'react';
-import { Redirect, Route, RouteComponentProps } from 'react-router';
-import { Router } from 'react-router-dom';
-import { App, Profile, Admin } from '../components';
+import { Redirect, Route } from 'react-router';
+import { Profile, Admin, Welcome } from '../components';
 import { Callback, Home } from '../components';
-import { WebAuthentication } from './../auth/';
-import history from './History';
+import { Auth0Authentication } from 'src/auth/Auth0Authentication';
 
-const auth = new WebAuthentication();
+export interface RouterProps {
+  auth: Auth0Authentication;
+}
 
-const handleAuthentication = (props: RouteComponentProps<{}>) => {
-  if (/access_token|id_token|error/.test(location.hash)) {
-    auth.handleAuthentication();
+export class Routes extends React.Component<RouterProps> {
+  constructor(props: RouterProps) {
+    super(props);
   }
-};
-
-const Routes: React.SFC<{}> = () => {
-  const { authenticated, userHasScopes } = auth;
-  return (
-    <Router history={history}>
+  handleAuthentication() {
+    if (/access_token|id_token|error/.test(location.hash)) {
+      this.props.auth.handleAuthentication();
+    }
+  }
+  render() {
+    const { authenticated, userHasScopes } = this.props.auth;
+    return (
       <div>
-        <Route path="/" render={props => <App auth={auth} {...props} />} />
         <main role="main">
+          <Route path="/" render={() => <Welcome />} />
           <Route
             path="/home"
             render={props =>
               !authenticated ? (
                 <Redirect to="/" />
               ) : (
-                <Home auth={auth} {...props} />
+                <Home auth={this.props.auth} {...props} />
               )
             }
           />
@@ -37,7 +39,7 @@ const Routes: React.SFC<{}> = () => {
               !authenticated ? (
                 <Redirect to="/" />
               ) : (
-                <Profile auth={auth} {...props} />
+                <Profile auth={this.props.auth} {...props} />
               )
             }
           />
@@ -47,20 +49,19 @@ const Routes: React.SFC<{}> = () => {
               !authenticated || !userHasScopes(['write:messages']) ? (
                 <Redirect to="/" />
               ) : (
-                <Admin auth={auth} {...props} />
+                <Admin auth={this.props.auth} {...props} />
               )
             }
           />
           <Route
             path="/callback"
             render={props => {
-              handleAuthentication(props);
+              this.handleAuthentication();
               return <Callback {...props} />;
             }}
           />
         </main>
       </div>
-    </Router>
-  );
-};
-export default Routes;
+    );
+  }
+}

@@ -7,20 +7,11 @@ import * as ReactDOM from "react-dom";
 
 import registerServiceWorker from "./registerServiceWorker";
 import * as dotenv from "dotenv";
-
-import { Provider } from "react-redux";
-
-import Routes from "./utils/Routes";
-import store from "./store";
+import App from './containers/App/App';
 
 dotenv.config();
 
-const rootElement = document.getElementById("root");
 ReactDOM.render(
-  <Provider store={store}>
-    <Routes />
-  </Provider>,
-  rootElement
-);
-
+  <App />,
+  document.getElementById('root') as HTMLElement);
 registerServiceWorker();

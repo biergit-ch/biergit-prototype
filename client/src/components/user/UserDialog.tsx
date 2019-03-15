@@ -8,8 +8,6 @@ import {
   DialogActions,
   Button
 } from "@material-ui/core";
-import { addUser } from 'src/actions';
-import { connect } from 'react-redux';
 
 export interface UserDialogProps {
   addUser: any;
@@ -83,8 +81,3 @@ export class UserDialog extends React.Component<
     );
   }
 }
-
-export default connect(
-  null,
-  { addUser }
-)(UserDialog);
