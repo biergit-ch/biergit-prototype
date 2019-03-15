@@ -3,8 +3,8 @@ import { Schema } from "mongoose";
 export var userSchema: Schema = new Schema({
   createdAt: Date,
   email: String,
-  firstName: String,
-  lastName: String
+  userName: String,
+  nickName: String
 });
 userSchema.pre("save", (next) => {
   if (!this.createdAt) {
