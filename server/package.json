@@ -4,6 +4,9 @@
   "description": "Express Server",
   "main": "src/server.js",
   "scripts": {
+    "build-ts": "tsc",
+    "postinstall": "npm run build-ts",
+    "start": "npm run serve",
     "dev": "ts-node ./src/server.ts",
     "lint": "tslint -p tsconfig.json -c tslint.json",
     "test": "jest"
