@@ -1,7 +1,7 @@
 /** User model definitions **/
 
 export interface UserModel {
-  id: number;
-  username: string;
-  nickname: string;
+  _id: string;
+  userName: string;
+  nickName: string;
 }

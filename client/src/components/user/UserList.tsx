@@ -1,6 +1,6 @@
 import * as React from "react";
 import { UserModel } from "src/models";
-import axios, { AxiosResponse } from "axios";
+import axios from "axios";
 import { User } from "./User";
 import {
   Typography,
@@ -68,18 +68,28 @@ export const UserList = withStyles(styles)(
     }
 
     getData() {
-      axios
-        .get<AxiosResponse>(process.env.REACT_APP_API_URI + "/users")
-        .then(res => this.setState({ userList: res.data.data }));
+      axios.get<any>(process.env.REACT_APP_API_URI + "/users").then(res => {
+        console.log(res);
+        if (res.data != null && res.data.length > 0) {
+          this.setState({ userList: res.data });
+        }
+      });
     }
 
-    addUser(userName: string, nickName: string) {
+    addUser(email: string, userName: string, nickName: string) {
       axios
-        .post<AxiosResponse>(process.env.REACT_APP_API_URI + "/users", {
-          userName,
-          nickName
-        })
-        .then(res => this.setState({ userList: res.data.data }));
+        .post<any>(
+          process.env.REACT_APP_API_URI + "/users",
+          JSON.stringify({
+            userName,
+            nickName,
+            email
+          })
+        )
+        .then(res => {
+          console.log(res);
+          this.setState({ userList: [...this.state.userList, res.data] });
+        });
     }
 
     openUserDialog() {
@@ -88,11 +98,11 @@ export const UserList = withStyles(styles)(
       });
     }
 
-    callback = (userName: string, nickName: string) => {
+    callback = (email: string, userName: string, nickName: string) => {
       this.setState({
         openUserDialog: false
       });
-      this.addUser(userName, nickName);
+      this.addUser(email, userName, nickName);
     };
 
     render() {

@@ -27,6 +27,7 @@ export interface IUserDialogState {
   open: boolean;
   userName: string;
   nickName: string;
+  email: string;
 }
 export class UserDialog extends React.Component<
   UserDialogProps,
@@ -37,7 +38,8 @@ export class UserDialog extends React.Component<
     this.state = {
       open: props.open,
       userName: "",
-      nickName: ""
+      nickName: "",
+      email: ""
     };
   }
 
@@ -46,7 +48,7 @@ export class UserDialog extends React.Component<
   };
 
   handleClose() {
-    this.props.onClose(this.state.userName, this.state.nickName);
+    this.props.onClose(this.state.email, this.state.userName, this.state.nickName);
     this.setState({ userName: "", nickName: "" });
   };
 
@@ -73,10 +75,19 @@ export class UserDialog extends React.Component<
           <TextField
             autoFocus
             margin="dense"
+            name="email"
+            value={this.state.email}
+            onChange={this.handleChange.bind(this)}
+            label="Email Address"
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            margin="dense"
             name="userName"
             value={this.state.userName}
             onChange={this.handleChange.bind(this)}
-            label="User Name"
+            label="Username"
             fullWidth
           />
           <TextField

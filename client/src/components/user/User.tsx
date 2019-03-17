@@ -7,6 +7,6 @@ interface UserProps {
 
 export class User extends React.Component<UserProps> {
   render() {
-    return <li key={this.props.user.id}>{this.props.user.username}</li>;
+    return <li key={this.props.user._id}>{this.props.user.userName}</li>;
   }
 }

@@ -10,10 +10,10 @@ export namespace UserActions {
   }
 
   export const addUser = createAction<UserModel>(Type.ADD_USER);
-  export const editUser = createAction<PartialPick<UserModel, 'id'>>(
+  export const editUser = createAction<PartialPick<UserModel, '_id'>>(
     Type.EDIT_USER
   );
-  export const deleteUser = createAction<UserModel['id']>(Type.DELETE_USER);
+  export const deleteUser = createAction<UserModel['_id']>(Type.DELETE_USER);
 }
 
 export type UserActions = Omit<typeof UserActions, 'Type'>;

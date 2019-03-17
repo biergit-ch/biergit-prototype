@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import axios from 'axios';
+import axios from "axios";
 import {
   Button,
   TextField,
@@ -11,13 +11,13 @@ import {
   withStyles,
   Grid,
   Paper
-} from '@material-ui/core';
+} from "@material-ui/core";
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap'
+      display: "flex",
+      flexWrap: "wrap"
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -32,7 +32,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary
     }
   });
@@ -47,16 +47,16 @@ interface IState {
   objectToUpdate: any;
   updateToApply: any;
 }
-export interface GroupListProps extends WithStyles<typeof styles> { }
+export interface GroupListProps extends WithStyles<typeof styles> {}
 export const GroupList = withStyles(styles)(
   class GroupList extends React.Component<
     GroupListProps & WithStyles<keyof typeof styles>,
     IState
-    > {
+  > {
     state: IState = {
       data: [],
       id: 0,
-      message: '',
+      message: "",
       intervalIsSet: false,
       idToDelete: null,
       idToUpdate: null,
@@ -89,9 +89,21 @@ export const GroupList = withStyles(styles)(
     // our first get method that uses our backend api to
     // fetch data from our data base
     getDataFromDb = () => {
-      fetch(process.env.REACT_APP_API_URI + '/groups')
-        .then(data => data.json())
-        .then(res => this.setState({ data: res.data }));
+      fetch(process.env.REACT_APP_API_URI + "/groups")
+        .then(data => {
+          try {
+            console.log(data);
+            return data.json();
+          } catch (e) {
+            console.log(e);
+            return null;
+          }
+        })
+        .then(res => {
+          if (res != null && res.data != null) {
+            this.setState({ data: res.data });
+          }
+        });
     };
 
     // our put method that uses our backend api
@@ -103,7 +115,7 @@ export const GroupList = withStyles(styles)(
         ++idToBeAdded;
       }
 
-      axios.post(process.env.REACT_APP_API_URI + '/groups', {
+      axios.post(process.env.REACT_APP_API_URI + "/groups", {
         id: idToBeAdded,
         message: message
       });
@@ -119,7 +131,7 @@ export const GroupList = withStyles(styles)(
         }
       });
 
-      axios.delete(process.env.REACT_APP_API_URI + '/groups', {
+      axios.delete(process.env.REACT_APP_API_URI + "/groups", {
         data: {
           id: objIdToDelete
         }
@@ -136,7 +148,7 @@ export const GroupList = withStyles(styles)(
         }
       });
 
-      axios.post(process.env.REACT_APP_API_URI + '/groups', {
+      axios.post(process.env.REACT_APP_API_URI + "/groups", {
         id: objIdToUpdate,
         update: { message: updateToApply }
       });
@@ -156,17 +168,17 @@ export const GroupList = withStyles(styles)(
                 {data.length <= 0 ? (
                   <Typography variant="body1">NO GROUPS</Typography>
                 ) : (
-                    <ul>
-                      {data.map(dat => (
-                        <li style={{ padding: '10px' }} key={dat.id}>
-                          <span style={{ color: 'gray' }}> id: </span> {dat.id}{' '}
-                          <br />
-                          <span style={{ color: 'gray' }}> data: </span>
-                          {dat.message}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
+                  <ul>
+                    {data.map(dat => (
+                      <li style={{ padding: "10px" }} key={dat.id}>
+                        <span style={{ color: "gray" }}> id: </span> {dat.id}{" "}
+                        <br />
+                        <span style={{ color: "gray" }}> data: </span>
+                        {dat.message}
+                      </li>
+                    ))}
+                  </ul>
+                )}
               </Paper>
             </Grid>
             <Grid item xs={12}>
