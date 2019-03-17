@@ -80,11 +80,11 @@ export const UserList = withStyles(styles)(
       axios
         .post<any>(
           process.env.REACT_APP_API_URI + "/users",
-          JSON.stringify({
+          {
             userName,
             nickName,
             email
-          })
+          }
         )
         .then(res => {
           console.log(res);
