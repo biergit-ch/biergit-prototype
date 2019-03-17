@@ -6,20 +6,15 @@
     "configurations": [
         {
             "type": "node",
-            "request": "attach",
-            "name": "Attach",
-            "port": 3001
-        },
-        {
-            "type": "node",
             "request": "launch",
             "name": "Launch via NPM",
+            "sourceMaps": true,
+            "cwd": "${workspaceFolder}/server",
             "runtimeExecutable": "npm",
             "runtimeArgs": [
                 "run-script",
-                "debug"
-            ],
-            "port": 3001
+                "dev"
+            ]
         },
         {
             "name": "Chrome",
@@ -30,6 +25,6 @@
             "sourceMapPathOverrides": {
                 "webpack:///src/*": "${webRoot}/*"
             }
-        }
+        },
     ]
 }
