@@ -12,6 +12,8 @@ const corsOptions = {
     if (whitelist.indexOf(origin) !== -1) {
       callback(null, true);
     } else {
+      console.log('tried to access from ' + origin);
+      // callback(null, true);
       callback(new Error('Not allowed by CORS'));
     }
   }),
@@ -40,6 +42,9 @@ class App {
   }
 
   private initializeMiddlewares() {
+    this.app.use(bodyParser.urlencoded({
+      extended: true,
+    }));
     this.app.use(bodyParser.json());
     this.app.use(cookieParser());
     this.app.use(cors(corsOptions));

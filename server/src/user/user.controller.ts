@@ -29,9 +29,7 @@ class UserController implements Controller {
   }
 
   private createUser = async (request: RequestWithUser, response: express.Response) => {
-    console.log(request.body);
     const createUserDto: CreateUserDto = request.body;
-    console.log(createUserDto);
     const createUser = new this.user({
       ...createUserDto,
     });
