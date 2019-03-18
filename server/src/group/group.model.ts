@@ -8,6 +8,7 @@ const groupSchema = new mongoose.Schema({
   },
   groupName: String,
 });
+  // TODO ADD members
 
 const groupModel = mongoose.model<Group & mongoose.Document>('Group', groupSchema);
 
