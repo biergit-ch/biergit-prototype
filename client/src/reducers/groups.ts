@@ -1,25 +1,27 @@
 import { handleActions } from 'redux-actions';
 import { RootState } from './state';
-import { GroupModel } from 'src/models';
-import { GroupActions } from 'src/actions';
+import { GroupActions } from './../actions';
+import { IGroup, IUser, User } from './../models';
+import UUIDV4 from './../utils/UUID';
 
 const initialState: RootState.GroupState = [
   {
-    id: 1,
-    groupname: 'new User',
-    members: []
+    _id: UUIDV4(),
+    groupName: 'new Group',
+    members: new Array<IUser>(),
+    owner: new User()
   }
 ];
 
-export const groupReducer = handleActions<RootState.GroupState, GroupModel>(
+export const groupReducer = handleActions<RootState.GroupState, IGroup>(
   {
     [GroupActions.Type.ADD_GROUP]: (state, action) => {
-      if (action.payload && action.payload.groupname) {
+      if (action.payload && action.payload.groupName) {
         return [
           {
-            id:
-              state.reduce((max, group) => Math.max(group.id || 1, max), 0) + 1,
-            groupname: action.payload.groupname,
+            _id: action.payload._id,
+            groupName: action.payload.groupName,
+            owner: action.payload.owner,
             members: action.payload.members
           },
           ...state
@@ -27,19 +29,14 @@ export const groupReducer = handleActions<RootState.GroupState, GroupModel>(
       }
       return state;
     },
-    [GroupActions.Type.DELETE_GROUP]: (state, action) => {
-      return state.filter(group => group.id !== (action.payload as any));
-    },
     [GroupActions.Type.EDIT_GROUP]: (state, action) => {
       return state.map(group => {
         if (!group || !action || !action.payload) {
           return group;
         }
-        return (group.id || 0) === action.payload.id
+        return (group._id || 0) === action.payload._id
           ? {
               ...group,
-              groupname: action.payload.groupname,
-              members: action.payload.members
             }
           : group;
       });

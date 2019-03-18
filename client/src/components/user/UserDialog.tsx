@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -8,15 +8,16 @@ import {
   DialogActions,
   Button,
   withStyles,
-  createStyles,
-} from "@material-ui/core";
+  createStyles
+} from '@material-ui/core';
 import { blue } from '@material-ui/core/colors';
+import { User } from 'src/models';
 
 const styles = createStyles({
   avatar: {
     backgroundColor: blue[100],
-    color: blue[600],
-  },
+    color: blue[600]
+  }
 });
 
 export interface UserDialogProps {
@@ -37,27 +38,30 @@ export class UserDialog extends React.Component<
     super(props);
     this.state = {
       open: props.open,
-      userName: "",
-      nickName: "",
-      email: ""
+      userName: '',
+      nickName: '',
+      email: ''
     };
   }
 
   handleClickOpen() {
     this.setState({ open: true });
-  };
+  }
 
   handleClose() {
-    this.props.onClose(this.state.email, this.state.userName, this.state.nickName);
-    this.setState({ userName: "", nickName: "" });
-  };
+    let user = new User(
+      this.state.userName,
+      this.state.nickName,
+      this.state.email
+    );
+    this.props.onClose(user);
+    this.setState({ userName: '', nickName: '', email: '' });
+  }
 
   handleChange(e: any) {
-    // If you are using babel, you can use ES 6 dictionary syntax
-    // let change = { [e.target.name] = e.target.value }
-    let change = {}
-    change[e.target.name] = e.target.value
-    this.setState(change)
+    let change = {};
+    change[e.target.name] = e.target.value;
+    this.setState(change);
   }
 
   render() {

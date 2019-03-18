@@ -1,17 +1,19 @@
 import { handleActions } from 'redux-actions';
 import { RootState } from './state';
-import { UserModel } from 'src/models';
-import { UserActions } from 'src/actions';
+import { UserActions } from './../actions';
+import { IUser } from './../models';
+import UUIDV4 from './../utils/UUID';
 
 const initialState: RootState.UserState = [
   {
-    _id: "newId",
+    _id: UUIDV4(),
     userName: 'new User',
-    nickName: 'nickname'
+    nickName: 'nickname',
+    email: 'email'
   }
 ];
 
-export const userReducer = handleActions<RootState.UserState, UserModel>(
+export const userReducer = handleActions<RootState.UserState, IUser>(
   {
     [UserActions.Type.ADD_USER]: (state, action) => {
       if (action.payload && action.payload.userName) {
@@ -19,7 +21,8 @@ export const userReducer = handleActions<RootState.UserState, UserModel>(
           {
             _id: action.payload._id,
             userName: action.payload.userName,
-            nickName: action.payload.nickName
+            nickName: action.payload.nickName,
+            email: action.payload.email
           },
           ...state
         ];

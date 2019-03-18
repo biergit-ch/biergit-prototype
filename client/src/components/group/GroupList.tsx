@@ -1,9 +1,6 @@
-import * as React from "react";
-
-import axios from "axios";
+import * as React from 'react';
 import {
   Button,
-  TextField,
   Typography,
   createStyles,
   Theme,
@@ -11,13 +8,17 @@ import {
   withStyles,
   Grid,
   Paper
-} from "@material-ui/core";
+} from '@material-ui/core';
+import GroupDialog from './GroupDialog';
+import { IGroup } from './../../models';
+import { GroupActions } from './../../actions';
+import { RootState } from './../../reducers';
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      flexWrap: "wrap"
+      display: 'flex',
+      flexWrap: 'wrap'
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -32,149 +33,76 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: "center",
+      textAlign: 'center',
       color: theme.palette.text.secondary
     }
   });
 
-interface IState {
-  data: Array<any>;
+interface GroupListState {
   id: number;
+  openGroupDialog: boolean;
   message: string;
-  intervalIsSet: any;
-  idToDelete?: any;
-  idToUpdate?: any;
   objectToUpdate: any;
   updateToApply: any;
 }
-export interface GroupListProps extends WithStyles<typeof styles> {}
+export interface GroupListProps extends WithStyles<typeof styles> {
+  users: RootState.UserState;
+  groups: RootState.GroupState;
+  actions: GroupActions;
+  openDialog: any;
+}
 export const GroupList = withStyles(styles)(
   class GroupList extends React.Component<
     GroupListProps & WithStyles<keyof typeof styles>,
-    IState
+    GroupListState
   > {
-    state: IState = {
-      data: [],
+    state: GroupListState = {
       id: 0,
-      message: "",
-      intervalIsSet: false,
-      idToDelete: null,
-      idToUpdate: null,
+      openGroupDialog: false,
+      message: '',
       objectToUpdate: null,
       updateToApply: null
     };
 
     componentDidMount() {
-      this.getDataFromDb();
-      if (!this.state.intervalIsSet) {
-        //let interval = setInterval(this.getDataFromDb, 1000);
-        //this.setState({ intervalIsSet: interval });
-      }
+      //this.props.actions.actionFetchGroups();
     }
-
-    // never let a process live forever
-    // always kill a process everytime we are done using it
-    componentWillUnmount() {
-      if (this.state.intervalIsSet) {
-        clearInterval(this.state.intervalIsSet);
-        this.setState({ intervalIsSet: null });
-      }
-    }
-
-    // just a note, here, in the front end, we use the id key of our data object
-    // in order to identify which we want to Update or delete.
-    // for our back end, we use the object id assigned by MongoDB to modify
-    // data base entries
-
-    // our first get method that uses our backend api to
-    // fetch data from our data base
-    getDataFromDb = () => {
-      fetch(process.env.REACT_APP_API_URI + "/groups")
-        .then(data => {
-          try {
-            console.log(data);
-            return data.json();
-          } catch (e) {
-            console.log(e);
-            return null;
-          }
-        })
-        .then(res => {
-          if (res != null && res.data != null) {
-            this.setState({ data: res.data });
-          }
-        });
-    };
-
-    // our put method that uses our backend api
-    // to create new query into our data base
-    putDataToDB(message: string) {
-      let currentIds = this.state.data.map(data => data.id);
-      let idToBeAdded = 0;
-      while (currentIds.includes(idToBeAdded)) {
-        ++idToBeAdded;
-      }
-
-      axios.post(process.env.REACT_APP_API_URI + "/groups", {
-        id: idToBeAdded,
-        message: message
+    openGroupDialog() {
+      this.setState({
+        openGroupDialog: true
       });
     }
 
-    // our delete method that uses our backend api
-    // to remove existing database information
-    deleteFromDB(idTodelete: any) {
-      let objIdToDelete = null;
-      this.state.data.forEach(dat => {
-        if (dat.id == idTodelete) {
-          objIdToDelete = dat._id;
-        }
+    callback(groupModel: IGroup) {
+      this.setState({
+        openGroupDialog: false
       });
-
-      axios.delete(process.env.REACT_APP_API_URI + "/groups", {
-        data: {
-          id: objIdToDelete
-        }
-      });
-    }
-
-    // our update method that uses our backend api
-    // to overwrite existing data base information
-    updateDB(idToUpdate: string, updateToApply: string) {
-      let objIdToUpdate = null;
-      this.state.data.forEach(dat => {
-        if (dat.id == idToUpdate) {
-          objIdToUpdate = dat._id;
-        }
-      });
-
-      axios.post(process.env.REACT_APP_API_URI + "/groups", {
-        id: objIdToUpdate,
-        update: { message: updateToApply }
-      });
+      this.props.actions.addGroup(groupModel);
     }
 
     render() {
-      const { data } = this.state;
+      const { groups, users } = this.props;
       const { classes } = this.props;
       return (
         <div className={classes.root}>
           <Grid container spacing={24}>
             <Grid item xs={12}>
-              <Typography variant="h5">Groups</Typography>
+              <Typography variant="h5">Users</Typography>
+              <Typography>Hello there</Typography>
+              <Typography>Below a list of all groups</Typography>
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {data.length <= 0 ? (
+                {groups == null || groups.length <= 0 ? (
                   <Typography variant="body1">NO GROUPS</Typography>
                 ) : (
                   <ul>
-                    {data.map(dat => (
-                      <li style={{ padding: "10px" }} key={dat.id}>
-                        <span style={{ color: "gray" }}> id: </span> {dat.id}{" "}
+                    {groups.map((group, index) => (
+                      <li style={{ padding: '10px' }} key={index}>
+                        <span style={{ color: 'gray' }}> id: </span> {group._id}{' '}
                         <br />
-                        <span style={{ color: "gray" }}> data: </span>
-                        {dat.message}
+                        <span style={{ color: 'gray' }}> name: </span>
+                        {group.groupName}
                       </li>
                     ))}
                   </ul>
@@ -182,73 +110,22 @@ export const GroupList = withStyles(styles)(
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <form className={classes.container} noValidate autoComplete="off">
-                <TextField
-                  className={classes.textField}
-                  onChange={e => this.setState({ message: e.target.value })}
-                  placeholder="add something in the database"
-                  margin="normal"
-                  variant="outlined"
-                />
-                <Button
-                  onClick={() => this.putDataToDB(this.state.message)}
-                  variant="contained"
-                >
-                  ADD
-                </Button>
-              </form>
-            </Grid>
-            <Grid item xs={12}>
-              <form className={classes.container} noValidate autoComplete="off">
-                <TextField
-                  className={classes.textField}
-                  onChange={e => this.setState({ idToDelete: e.target.value })}
-                  placeholder="put id of item to delete here"
-                  margin="normal"
-                  variant="outlined"
-                />
-                <Button
-                  onClick={() => this.deleteFromDB(this.state.idToDelete)}
-                  variant="contained"
-                >
-                  DELETE
-                </Button>
-              </form>
-            </Grid>
-            <Grid item xs={12}>
-              <form className={classes.container} noValidate autoComplete="off">
-                <TextField
-                  className={classes.textField}
-                  onChange={e => this.setState({ idToUpdate: e.target.value })}
-                  placeholder="id of item to update here"
-                  margin="normal"
-                  variant="outlined"
-                />
-                <TextField
-                  className={classes.textField}
-                  onChange={e =>
-                    this.setState({ updateToApply: e.target.value })
-                  }
-                  placeholder="put new value of the item here"
-                  margin="normal"
-                  variant="outlined"
-                />
-                <Button
-                  onClick={() =>
-                    this.updateDB(
-                      this.state.idToUpdate,
-                      this.state.updateToApply
-                    )
-                  }
-                  variant="contained"
-                >
-                  UPDATE
-                </Button>
-              </form>
+              <Button
+                variant="contained"
+                onClick={() => this.openGroupDialog()}
+              >
+                ADD
+              </Button>
             </Grid>
           </Grid>
+          <GroupDialog
+            open={this.state.openGroupDialog}
+            onClose={this.callback}
+            users={users}
+          />
         </div>
       );
     }
   }
 );
+export default withStyles(styles as any)(GroupList as any);

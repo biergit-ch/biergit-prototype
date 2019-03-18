@@ -10,8 +10,8 @@
     "axios": "^0.18.0",
     "dotenv": "^7.0.0",
     "hoist-non-react-statics": "3.3.0",
-    "lodash": "^4.17.11",
     "immutable": "^3.8.2",
+    "lodash": "^4.17.11",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-redux": "^6.0.1",
@@ -20,6 +20,7 @@
     "react-scripts-ts": "3.1.0",
     "redux": "^4.0.1",
     "redux-actions": "^2.6.5",
+    "redux-thunk": "^2.3.0",
     "typeface-roboto": "^0.0.54"
   },
   "scripts": {

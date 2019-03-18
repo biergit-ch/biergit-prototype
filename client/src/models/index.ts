@@ -1,3 +1,3 @@
-export { UserModel } from './UserModel';
-export { GroupModel } from './GroupModel';
+export { IUser, User } from './User';
+export { IGroup, Group } from './Group';
 export { UserProfile } from './UserProfile';

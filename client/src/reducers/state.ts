@@ -1,4 +1,4 @@
-import { UserModel, GroupModel } from 'src/models';
+import { IGroup, IUser } from 'src/models';
 
 export interface RootState {
   groups: RootState.GroupState;
@@ -7,6 +7,6 @@ export interface RootState {
 }
 
 export namespace RootState {
-  export type UserState = UserModel[];
-  export type GroupState = GroupModel[];
+  export type UserState = IUser[];
+  export type GroupState = IGroup[];
 }

@@ -1,7 +1,5 @@
-import * as React from "react";
-import { UserModel } from "src/models";
-import axios from "axios";
-import { User } from "./User";
+import * as React from 'react';
+import { UserDetail } from './UserDetail';
 import {
   Typography,
   Grid,
@@ -11,14 +9,16 @@ import {
   createStyles,
   Paper,
   Button
-} from "@material-ui/core";
-import { UserDialog } from "./UserDialog";
+} from '@material-ui/core';
+import { UserDialog } from './UserDialog';
+import { IUser } from 'src/models';
+import { UserActions } from 'src/actions';
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      flexWrap: "wrap"
+      display: 'flex',
+      flexWrap: 'wrap'
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -33,63 +33,38 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: "center",
+      textAlign: 'center',
       color: theme.palette.text.secondary
     }
   });
 
-interface IState {
-  userList: Array<UserModel>;
+interface UserListState {
   openUserDialog: boolean;
 }
 
 export interface UserListProps extends WithStyles<typeof styles> {
   name: string;
   openDialog: any;
+  users: Array<IUser>;
+  actions: UserActions;
 }
 export const UserList = withStyles(styles)(
   class UserList extends React.Component<
     UserListProps & WithStyles<keyof typeof styles>,
-    IState
+    UserListState
   > {
-    state: IState;
-    userList: Array<UserModel>;
+    state: UserListState;
+    userList: Array<IUser>;
 
     constructor(props: UserListProps) {
       super(props);
       this.state = {
-        userList: new Array<UserModel>(),
         openUserDialog: false
       };
     }
 
-    public componentDidMount() {
-      this.getData();
-    }
-
-    getData() {
-      axios.get<any>(process.env.REACT_APP_API_URI + "/users").then(res => {
-        console.log(res);
-        if (res.data != null && res.data.length > 0) {
-          this.setState({ userList: res.data });
-        }
-      });
-    }
-
-    addUser(email: string, userName: string, nickName: string) {
-      axios
-        .post<any>(
-          process.env.REACT_APP_API_URI + "/users",
-          {
-            userName,
-            nickName,
-            email
-          }
-        )
-        .then(res => {
-          console.log(res);
-          this.setState({ userList: [...this.state.userList, res.data] });
-        });
+    componentWillMount() {
+      this.props.actions.actionFetchUsers();
     }
 
     openUserDialog() {
@@ -98,14 +73,15 @@ export const UserList = withStyles(styles)(
       });
     }
 
-    callback = (email: string, userName: string, nickName: string) => {
+    callback = (user: IUser) => {
       this.setState({
         openUserDialog: false
       });
-      this.addUser(email, userName, nickName);
+      this.props.actions.addUser(user);
     };
 
     render() {
+      const { users } = this.props;
       const { classes } = this.props;
       return (
         <div className={classes.root}>
@@ -117,12 +93,12 @@ export const UserList = withStyles(styles)(
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {this.state.userList.length <= 0 ? (
+                {users == null || users.length <= 0 ? (
                   <Typography variant="body1">NO USERS</Typography>
                 ) : (
                   <ul>
-                    {this.state.userList.map(user => (
-                      <User user={user} />
+                    {users.map(user => (
+                      <UserDetail user={user} key={user._id} />
                     ))}
                   </ul>
                 )}
@@ -143,22 +119,4 @@ export const UserList = withStyles(styles)(
     }
   }
 );
-
-// export interface AppProps extends WithStyles<typeof styles> {
-//   auth: Auth0Authentication;
-//   userActions: UserActions;
-//   groupActions: GroupActions;
-// }
-
-// const mapStateToProps = (state: AppState) => ({
-//   authenticated: state.authenticated,
-//   users: state.users,
-//   groups: state.groups
-// });
-
-// const mapDispatchtoProps = (
-//   dispatch: Dispatch
-// ): Pick<AppProps, 'userActions' | 'groupActions'> => ({
-//   userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch),
-//   groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch)
-// });
+export default withStyles(styles as any)(UserList as any);
