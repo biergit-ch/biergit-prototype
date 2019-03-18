@@ -11,10 +11,9 @@ import { bindActionCreators } from 'redux';
 import { omit } from 'src/utils';
 
 export interface HomeProps extends RouteComponentProps<void> {
-  loadUsers: () => () => void;
-  loadGroups: () => () => void;
-  userState: string,
-  groupState: string,
+  loadData: () => () => void;
+  userState: string;
+  groupState: string;
   auth: Auth0Authentication;
   groups: RootState.GroupState;
   users: RootState.UserState;
@@ -28,11 +27,11 @@ class Home extends React.Component<HomeProps, HomeState> {
     super(props, state);
   }
   componentDidMount() {
-    if (this.props.groupState === 'INIT'){
-      this.props.loadGroups();
+    if (this.props.groupState === 'INIT') {
+      this.props.groupActions.actionFetchGroups();
     }
-    if (this.props.userState === 'INIT'){
-      this.props.loadUsers();
+    if (this.props.userState === 'INIT') {
+      this.props.loadData();
     }
   }
   render() {
@@ -40,14 +39,7 @@ class Home extends React.Component<HomeProps, HomeState> {
       <div style={{ padding: 20 }}>
         <Grid container spacing={24}>
           <Grid item xs={6}>
-            <Paper style={{ padding: 10 }}>
-              <UserList
-                name="CurrentUser"
-                openDialog="false"
-                actions={this.props.userActions}
-                users={this.props.users}
-              />
-            </Paper>
+            <Paper style={{ padding: 10 }}>{this.renderUsers()}</Paper>
           </Grid>
           <Grid item xs={6}>
             <Paper style={{ padding: 10 }}>
@@ -63,18 +55,42 @@ class Home extends React.Component<HomeProps, HomeState> {
       </div>
     );
   }
+
+  renderUsers() {
+    if (this.props.userState === 'LOADING') {
+      return <p>Loading ...</p>;
+    } else if (this.props.userState === 'ERROR') {
+      return <p>Error:</p>;
+    } else if (this.props.userState === 'LOADED') {
+      return (
+        <UserList
+          name="CurrentUser"
+          openDialog="false"
+          actions={this.props.userActions}
+          users={this.props.users}
+        />
+      );
+    } else {
+      return 'Init State';
+    }
+  }
 }
 
 function mapStateToProps(state: RootState, ownProps: HomeProps) {
-  return { users: state.users, groups: state.groups, groupState: 'INIT', userState: 'INIT' };
+  return {
+    users: state.users,
+    groups: state.groups,
+    groupState: 'INIT',
+    userState: 'INIT'
+  };
 }
 
 // binding an object full of action creators
 function mapDispatchToProps(dispatch: any) {
   return {
     dispatch,
-    loadGroups: () => dispatch(GroupActions.actionFetchGroups()),
-    loadUsers: () => dispatch(UserActions.actionFetchUsers()),
+    // microconf-workshops
+    loadData: () => dispatch(UserActions.actionFetchUsers()),
     groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch),
     userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch)
   };
