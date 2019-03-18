@@ -34,8 +34,8 @@ export class UserDialog extends React.Component<
   UserDialogProps,
   IUserDialogState
 > {
-  constructor(props: UserDialogProps) {
-    super(props);
+  constructor(props: UserDialogProps, state: IUserDialogState) {
+    super(props, state);
     this.state = {
       open: props.open,
       userName: '',

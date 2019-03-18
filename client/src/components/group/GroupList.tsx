@@ -11,8 +11,9 @@ import {
 } from '@material-ui/core';
 import GroupDialog from './GroupDialog';
 import { IGroup } from './../../models';
-// import { GroupActions } from './../../actions';
+import { GroupActions } from './../../actions';
 import { IUserState, IGroupState } from 'src/reducers/state';
+import GroupService from 'src/services/group';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -44,7 +45,7 @@ interface GroupListState {
 export interface GroupListProps extends WithStyles<typeof styles> {
   users: IUserState;
   groups: IGroupState;
-  //actions: GroupActions;
+  actions: GroupActions;
   openDialog: any;
 }
 export const GroupList = withStyles(styles)(
@@ -62,11 +63,14 @@ export const GroupList = withStyles(styles)(
       });
     }
 
-    callback(groupModel: IGroup) {
+    callback = (newGroup: IGroup) => {
       this.setState({
         openGroupDialog: false
       });
-      //this.props.actions.addGroup(groupModel);
+      debugger;
+      GroupService.create(newGroup).then((createdGroup: IGroup) => {
+        this.props.actions.addGroup(createdGroup);
+      })
     }
 
     render() {

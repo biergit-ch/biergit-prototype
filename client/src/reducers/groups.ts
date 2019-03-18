@@ -17,7 +17,7 @@ export const groupReducer = handleActions<IGroupState, IGroup>(
       state: IGroupState,
       action: GroupActions.IActionGroupsFetchSuccess
     ) => {
-      if (action.groups != null && action.groups.length > 0) {
+      if (action.groups != null) {
         return Object.assign({}, state, {
           state: "LOADED",
           groups: action.groups
@@ -26,16 +26,12 @@ export const groupReducer = handleActions<IGroupState, IGroup>(
       return state;
     },
     [GroupActions.Type.ADD_GROUP]: (state: any, action) => {
-      if (action.payload && action.payload.groupName) {
-        return [
-          {
-            _id: action.payload._id,
-            groupName: action.payload.groupName,
-            owner: action.payload.owner,
-            members: action.payload.members
-          },
-          ...state
-        ];
+      if (action.payload && action.payload._id) {
+        let group = action.payload;
+        return Object.assign({}, state, {
+          state: "LOADED",
+          groups: [...state.groups, group]
+        })
       }
       return state;
     },

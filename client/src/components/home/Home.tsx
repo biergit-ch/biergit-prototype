@@ -8,14 +8,16 @@ import { connect } from "react-redux";
 import { RouteComponentProps } from "react-router";
 import { IUserState, IGroupState } from "src/reducers/state";
 import { GroupActions, UserActions } from 'src/actions';
+import { bindActionCreators } from 'redux';
+import { omit } from 'src/utils';
 
 export interface HomeProps extends RouteComponentProps<void> {
   auth: Auth0Authentication;
   groups: IGroupState;
   users: IUserState;
   dispatch: any;
-  // userActions: UserActions;
-  // groupActions: GroupActions;
+  userActions: UserActions;
+  groupActions: GroupActions;
 }
 interface HomeState {}
 
@@ -47,7 +49,7 @@ class Home extends React.Component<HomeProps, HomeState> {
             <Paper style={{ padding: 10 }}>
               <GroupList
                 openDialog="false"
-                // actions={this.props.users}
+                actions={this.props.groupActions}
                 users={this.props.users}
                 groups={this.props.groups}
               />
@@ -59,7 +61,6 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 
   renderUsers() {
-    debugger;
     if (this.props.users.state === "LOADING") {
       return <p>Loading ...</p>;
     } else if (this.props.users.state === "ERROR") {
@@ -69,7 +70,7 @@ class Home extends React.Component<HomeProps, HomeState> {
         <UserList
           name="CurrentUser"
           openDialog="false"
-          // actions={this.props.userActions}
+          actions={this.props.userActions}
           users={this.props.users}
         />
       );
@@ -80,25 +81,22 @@ class Home extends React.Component<HomeProps, HomeState> {
 }
 
 function mapStateToProps(state: AppState, ownProps: HomeProps) {
-  debugger;
   const { users, groups } = state;
-
   return {
     users,
     groups
   };
 }
 
-// // binding an object full of action creators
-// function mapDispatchToProps(dispatch: any) {
-//   return {
-//     dispatch,
-//     groupActions: bindActionCreators(omit(GroupActions, "Type"), dispatch),
-//     userActions: bindActionCreators(omit(UserActions, "Type"), dispatch)
-//   };
-// }
+function mapDispatchToProps(dispatch: any) {
+  return {
+    dispatch,
+    groupActions: bindActionCreators(omit(GroupActions, "Type"), dispatch),
+    userActions: bindActionCreators(omit(UserActions, "Type"), dispatch)
+  };
+}
 
 export default connect(
   mapStateToProps,
-  null
+  mapDispatchToProps
 )(Home);

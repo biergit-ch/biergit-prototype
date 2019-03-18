@@ -20,7 +20,7 @@ export const userReducer = handleActions<IUserState, IUser>(
       state: RootState.UserState,
       action: UserActions.IActionUsersFetchSuccess
     ) => {
-      if (action.users != null && action.users.length > 0) {
+      if (action.users != null) {
         return Object.assign({}, state, {
           state: "LOADED",
           users: action.users
@@ -29,16 +29,13 @@ export const userReducer = handleActions<IUserState, IUser>(
       return state;
     },
     [UserActions.Type.ADD_USER]: (state : any, action) => {
-      if (action.payload && action.payload.userName) {
-        return [
-          {
-            _id: action.payload._id,
-            userName: action.payload.userName,
-            nickName: action.payload.nickName,
-            email: action.payload.email
-          },
-          ...state
-        ];
+      debugger;
+      if (action.payload && action.payload._id) {
+        let user = action.payload;
+        return Object.assign({}, state, {
+          state: "LOADED",
+          users: [...state.users, user]
+        })
       }
       return state;
     },

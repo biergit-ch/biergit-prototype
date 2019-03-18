@@ -61,11 +61,11 @@ export interface IGroupDialogState {
   members: Array<IUser>;
 }
 class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
-  constructor(props: GroupDialogProps) {
-    super(props);
+  constructor(props: GroupDialogProps, state : IGroupDialogState) {
+    super(props, state);
     this.state = {
       open: props.open,
-      groupName: "",
+      groupName: '',
       owner: new User(),
       members: new Array<IUser>()
     };
@@ -125,29 +125,41 @@ class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
           <TextField
             autoFocus
             margin="dense"
-            name="email"
+            name="groupName"
             value={this.state.groupName}
             onChange={this.handleChange.bind(this)}
             label="Group Name"
             fullWidth
           />
           <InputLabel htmlFor="owner-select">Owner</InputLabel>
-          <Select
-            autoFocus
-            margin="dense"
-            value={this.state.owner}
-            onChange={this.handleChange.bind(this)}
-            inputProps={{
-              name: "owner",
-              id: "owner-select"
-            }}
-          />
+          {users == null || users.users.length <= 0 ? (
+            <Typography variant="body1">NO USERS</Typography>
+          ) : (
+            <Select
+              margin="dense"
+              value={this.state.owner}
+              onChange={this.handleChange.bind(this)}
+              inputProps={{
+                name: "owner",
+                id: "owner-select"
+              }}
+            >
+              {users.users.map(user => (
+                <option
+                  key={user.userName}
+                  value={user.userName}
+                  style={getStyles(user, this)}
+                >
+                  {user.userName}
+                </option>
+              ))}
+            </Select>
+          )}
           <InputLabel htmlFor="members-select">Members</InputLabel>
           {users == null || users.users.length <= 0 ? (
             <Typography variant="body1">NO USERS</Typography>
           ) : (
             <Select
-              autoFocus
               multiple={true}
               margin="dense"
               value={this.state.members}

@@ -12,8 +12,9 @@ import {
 } from '@material-ui/core';
 import { UserDialog } from './UserDialog';
 import { IUser } from 'src/models';
-// import { UserActions } from 'src/actions';
+import { UserActions } from 'src/actions';
 import { IUserState } from 'src/reducers/state';
+import UserService from 'src/services/user';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -46,8 +47,8 @@ interface UserListState {
 export interface UserListProps extends WithStyles<typeof styles> {
   name: string;
   openDialog: any;
+  actions: UserActions;
   users: IUserState;
-  //actions: UserActions;
 }
 export const UserList = withStyles(styles)(
   class UserList extends React.Component<
@@ -74,7 +75,9 @@ export const UserList = withStyles(styles)(
       this.setState({
         openUserDialog: false
       });
-      //this.props.actions.addUser(user);
+      UserService.create(user).then((user: IUser) => {
+        this.props.actions.addUser(user);
+      })
     };
 
     render() {
