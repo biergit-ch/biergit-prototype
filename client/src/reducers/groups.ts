@@ -15,6 +15,12 @@ const initialState: RootState.GroupState = [
 
 export const groupReducer = handleActions<RootState.GroupState, IGroup>(
   {
+    [GroupActions.Type.FETCH_GROUPS]: (state, action) => {
+      return state;
+    },
+    [GroupActions.Type.FETCH_GROUPS_SUCCESS]: (state, action: GroupActions.IActionGroupsFetchSuccess) => {
+      return state;
+    },
     [GroupActions.Type.ADD_GROUP]: (state, action) => {
       if (action.payload && action.payload.groupName) {
         return [
@@ -36,7 +42,7 @@ export const groupReducer = handleActions<RootState.GroupState, IGroup>(
         }
         return (group._id || 0) === action.payload._id
           ? {
-              ...group,
+              ...group
             }
           : group;
       });

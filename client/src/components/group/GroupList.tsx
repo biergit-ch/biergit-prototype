@@ -39,11 +39,7 @@ const styles = (theme: Theme) =>
   });
 
 interface GroupListState {
-  id: number;
   openGroupDialog: boolean;
-  message: string;
-  objectToUpdate: any;
-  updateToApply: any;
 }
 export interface GroupListProps extends WithStyles<typeof styles> {
   users: RootState.UserState;
@@ -57,16 +53,9 @@ export const GroupList = withStyles(styles)(
     GroupListState
   > {
     state: GroupListState = {
-      id: 0,
-      openGroupDialog: false,
-      message: '',
-      objectToUpdate: null,
-      updateToApply: null
+      openGroupDialog: false
     };
 
-    componentDidMount() {
-      //this.props.actions.actionFetchGroups();
-    }
     openGroupDialog() {
       this.setState({
         openGroupDialog: true

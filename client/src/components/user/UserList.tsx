@@ -63,10 +63,6 @@ export const UserList = withStyles(styles)(
       };
     }
 
-    componentWillMount() {
-      this.props.actions.actionFetchUsers();
-    }
-
     openUserDialog() {
       this.setState({
         openUserDialog: true

@@ -1,8 +1,8 @@
 import { handleActions } from 'redux-actions';
 import { RootState } from './state';
 import { UserActions } from './../actions';
-import { IUser } from './../models';
 import UUIDV4 from './../utils/UUID';
+import { IUser } from 'src/models';
 
 const initialState: RootState.UserState = [
   {
@@ -15,6 +15,17 @@ const initialState: RootState.UserState = [
 
 export const userReducer = handleActions<RootState.UserState, IUser>(
   {
+    [UserActions.Type.FETCH_USERS]: (state, action: UserActions.IActionUsersFetch) => {
+      return state;
+    },
+    [UserActions.Type.FETCH_USERS_SUCCESS]: (state: any, action: UserActions.IActionUsersFetchSuccess) => {
+      debugger;
+      if(action.users != null && action.users.length > 0){
+        action.users.map(user => state.push(user))
+        return state;
+      }
+      return state;
+    },
     [UserActions.Type.ADD_USER]: (state, action) => {
       if (action.payload && action.payload.userName) {
         return [

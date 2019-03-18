@@ -11,19 +11,29 @@ import { bindActionCreators } from 'redux';
 import { omit } from 'src/utils';
 
 export interface HomeProps extends RouteComponentProps<void> {
+  loadUsers: () => () => void;
+  loadGroups: () => () => void;
+  userState: string,
+  groupState: string,
   auth: Auth0Authentication;
   groups: RootState.GroupState;
   users: RootState.UserState;
   userActions: UserActions;
   groupActions: GroupActions;
 }
-interface HomeState {
-}
+interface HomeState {}
 
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps, state: HomeState) {
     super(props, state);
-    //this.props.groupActions.actionFetchGroups();
+  }
+  componentDidMount() {
+    if (this.props.groupState === 'INIT'){
+      this.props.loadGroups();
+    }
+    if (this.props.userState === 'INIT'){
+      this.props.loadUsers();
+    }
   }
   render() {
     return (
@@ -54,30 +64,17 @@ class Home extends React.Component<HomeProps, HomeState> {
     );
   }
 }
-// @connect(
-//   (
-//     state: RootState,
-//     ownProps: any
-//   ): Pick<App.IHomeProps, 'groups' | 'users'> => {
-//     return { groups: state.groups, users: state.users };
-//   },
-//   (
-//     dispatch: Dispatch
-//   ): Pick<App.IHomeProps, 'groupActions' | 'userActions'> => ({
-//     groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch),
-//     userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch)
-//   })
-// )
 
-function mapStateToProps(state: any) {
-  const { users, groups } = state;
-  return { users: users, groups: groups };
+function mapStateToProps(state: RootState, ownProps: HomeProps) {
+  return { users: state.users, groups: state.groups, groupState: 'INIT', userState: 'INIT' };
 }
 
 // binding an object full of action creators
 function mapDispatchToProps(dispatch: any) {
   return {
     dispatch,
+    loadGroups: () => dispatch(GroupActions.actionFetchGroups()),
+    loadUsers: () => dispatch(UserActions.actionFetchUsers()),
     groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch),
     userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch)
   };
