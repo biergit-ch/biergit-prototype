@@ -1,27 +1,31 @@
-import { handleActions } from 'redux-actions';
-import { RootState } from './state';
-import { GroupActions } from './../actions';
-import { IGroup, IUser, User } from './../models';
-import UUIDV4 from './../utils/UUID';
+import { handleActions } from "redux-actions";
+import { IGroupState } from "./state";
+import { GroupActions } from "./../actions";
+import { IGroup } from "./../models";
 
-const initialState: RootState.GroupState = [
-  {
-    _id: UUIDV4(),
-    groupName: 'new Group',
-    members: new Array<IUser>(),
-    owner: new User()
-  }
-];
+const initialState: IGroupState = {
+  groups: [],
+  state: "INIT"
+};
 
-export const groupReducer = handleActions<RootState.GroupState, IGroup>(
+export const groupReducer = handleActions<IGroupState, IGroup>(
   {
     [GroupActions.Type.FETCH_GROUPS]: (state, action) => {
       return state;
     },
-    [GroupActions.Type.FETCH_GROUPS_SUCCESS]: (state, action: GroupActions.IActionGroupsFetchSuccess) => {
+    [GroupActions.Type.FETCH_GROUPS_SUCCESS]: (
+      state: IGroupState,
+      action: GroupActions.IActionGroupsFetchSuccess
+    ) => {
+      if (action.groups != null && action.groups.length > 0) {
+        return Object.assign({}, state, {
+          state: "LOADED",
+          groups: action.groups
+        })
+      }
       return state;
     },
-    [GroupActions.Type.ADD_GROUP]: (state, action) => {
+    [GroupActions.Type.ADD_GROUP]: (state: any, action) => {
       if (action.payload && action.payload.groupName) {
         return [
           {
@@ -35,8 +39,8 @@ export const groupReducer = handleActions<RootState.GroupState, IGroup>(
       }
       return state;
     },
-    [GroupActions.Type.EDIT_GROUP]: (state, action) => {
-      return state.map(group => {
+    [GroupActions.Type.EDIT_GROUP]: (state: any, action) => {
+      return state.groups.map((group: any) => {
         if (!group || !action || !action.payload) {
           return group;
         }

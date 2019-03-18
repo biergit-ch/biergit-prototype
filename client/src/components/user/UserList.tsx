@@ -12,7 +12,8 @@ import {
 } from '@material-ui/core';
 import { UserDialog } from './UserDialog';
 import { IUser } from 'src/models';
-import { UserActions } from 'src/actions';
+// import { UserActions } from 'src/actions';
+import { IUserState } from 'src/reducers/state';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -45,8 +46,8 @@ interface UserListState {
 export interface UserListProps extends WithStyles<typeof styles> {
   name: string;
   openDialog: any;
-  users: Array<IUser>;
-  actions: UserActions;
+  users: IUserState;
+  //actions: UserActions;
 }
 export const UserList = withStyles(styles)(
   class UserList extends React.Component<
@@ -73,7 +74,7 @@ export const UserList = withStyles(styles)(
       this.setState({
         openUserDialog: false
       });
-      this.props.actions.addUser(user);
+      //this.props.actions.addUser(user);
     };
 
     render() {
@@ -89,11 +90,11 @@ export const UserList = withStyles(styles)(
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {users == null || users.length <= 0 ? (
+                {users == null || users.users.length <= 0 ? (
                   <Typography variant="body1">NO USERS</Typography>
                 ) : (
                   <ul>
-                    {users.map(user => (
+                    {users.users.map(user => (
                       <UserDetail user={user} key={user._id} />
                     ))}
                   </ul>

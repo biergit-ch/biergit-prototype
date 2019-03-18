@@ -11,8 +11,8 @@ import {
 } from '@material-ui/core';
 import GroupDialog from './GroupDialog';
 import { IGroup } from './../../models';
-import { GroupActions } from './../../actions';
-import { RootState } from './../../reducers';
+// import { GroupActions } from './../../actions';
+import { IUserState, IGroupState } from 'src/reducers/state';
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -42,9 +42,9 @@ interface GroupListState {
   openGroupDialog: boolean;
 }
 export interface GroupListProps extends WithStyles<typeof styles> {
-  users: RootState.UserState;
-  groups: RootState.GroupState;
-  actions: GroupActions;
+  users: IUserState;
+  groups: IGroupState;
+  //actions: GroupActions;
   openDialog: any;
 }
 export const GroupList = withStyles(styles)(
@@ -66,7 +66,7 @@ export const GroupList = withStyles(styles)(
       this.setState({
         openGroupDialog: false
       });
-      this.props.actions.addGroup(groupModel);
+      //this.props.actions.addGroup(groupModel);
     }
 
     render() {
@@ -82,11 +82,11 @@ export const GroupList = withStyles(styles)(
             </Grid>
             <Grid item xs={12}>
               <Paper className={classes.paper}>
-                {groups == null || groups.length <= 0 ? (
+                {groups == null || groups.groups.length <= 0 ? (
                   <Typography variant="body1">NO GROUPS</Typography>
                 ) : (
                   <ul>
-                    {groups.map((group, index) => (
+                    {groups.groups.map((group, index) => (
                       <li style={{ padding: '10px' }} key={index}>
                         <span style={{ color: 'gray' }}> id: </span> {group._id}{' '}
                         <br />

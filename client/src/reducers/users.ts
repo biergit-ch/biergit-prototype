@@ -1,32 +1,34 @@
-import { handleActions } from 'redux-actions';
-import { RootState } from './state';
-import { UserActions } from './../actions';
-import UUIDV4 from './../utils/UUID';
-import { IUser } from 'src/models';
+import { handleActions } from "redux-actions";
+import { RootState, IUserState } from "./state";
+import { UserActions } from "./../actions";
+import { IUser } from "src/models";
 
-const initialState: RootState.UserState = [
-  {
-    _id: UUIDV4(),
-    userName: 'new User',
-    nickName: 'nickname',
-    email: 'email'
-  }
-];
+const initialState: IUserState = {
+  state: "INIT",
+  users: []
+};
 
-export const userReducer = handleActions<RootState.UserState, IUser>(
+export const userReducer = handleActions<IUserState, IUser>(
   {
-    [UserActions.Type.FETCH_USERS]: (state, action: UserActions.IActionUsersFetch) => {
+    [UserActions.Type.FETCH_USERS]: (
+      state,
+      action: UserActions.IActionUsersFetch
+    ) => {
       return state;
     },
-    [UserActions.Type.FETCH_USERS_SUCCESS]: (state: any, action: UserActions.IActionUsersFetchSuccess) => {
-      debugger;
-      if(action.users != null && action.users.length > 0){
-        action.users.map(user => state.push(user))
-        return state;
+    [UserActions.Type.FETCH_USERS_SUCCESS]: (
+      state: RootState.UserState,
+      action: UserActions.IActionUsersFetchSuccess
+    ) => {
+      if (action.users != null && action.users.length > 0) {
+        return Object.assign({}, state, {
+          state: "LOADED",
+          users: action.users
+        })
       }
       return state;
     },
-    [UserActions.Type.ADD_USER]: (state, action) => {
+    [UserActions.Type.ADD_USER]: (state : any, action) => {
       if (action.payload && action.payload.userName) {
         return [
           {
@@ -40,19 +42,23 @@ export const userReducer = handleActions<RootState.UserState, IUser>(
       }
       return state;
     },
-    [UserActions.Type.DELETE_USER]: (state, action) => {
-      return state.filter(user => user._id !== (action.payload as any));
+    [UserActions.Type.DELETE_USER]: (state: any, action) => {
+      return state.users.filter((user: any) => user._id !== (action.payload as any));
     },
-    [UserActions.Type.EDIT_USER]: (state, action) => {
-      return state.map(user => {
+    [UserActions.Type.EDIT_USER]: (state: any, action) => {
+      return state.users.map((user: any) => {
         if (!user || !action || !action.payload) {
           return user;
         }
         return (user._id || 0) === action.payload._id
-          ? { ...user, userName: action.payload.userName, nickName: action.payload.nickName }
+          ? {
+              ...user,
+              userName: action.payload.userName,
+              nickName: action.payload.nickName
+            }
           : user;
       });
-    },
+    }
   },
   initialState
 );

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -11,13 +11,14 @@ import {
   Select,
   InputLabel,
   Typography
-} from '@material-ui/core';
-import { IUser, User, Group } from 'src/models';
+} from "@material-ui/core";
+import { IUser, User, Group } from "src/models";
+import { IUserState } from "src/reducers/state";
 
 const styles = (theme: any) => ({
   root: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   formControl: {
     margin: theme.spacing.unit,
@@ -25,8 +26,8 @@ const styles = (theme: any) => ({
     maxWidth: 300
   },
   chips: {
-    display: 'flex',
-    flexWrap: 'wrap'
+    display: "flex",
+    flexWrap: "wrap"
   },
   chip: {
     margin: theme.spacing.unit / 4
@@ -37,17 +38,20 @@ const styles = (theme: any) => ({
 });
 
 function getStyles(user: IUser, that: any) {
-  return {
-    fontWeight:
-      that.props.users.indexOf(user) === -1
-        ? that.props.theme.typography.fontWeightRegular
-        : that.props.theme.typography.fontWeightMedium
-  };
+  if (user != null && that.props.users.users != null) {
+    return {
+      fontWeight:
+        that.props.users.users.indexOf(user) === -1
+          ? that.props.theme.typography.fontWeightRegular
+          : that.props.theme.typography.fontWeightMedium
+    };
+  }
+  return that.props.theme.typography.fontWeightRegular;
 }
 
 export interface GroupDialogProps {
   open: boolean;
-  users: Array<IUser>;
+  users: IUserState;
   onClose: Function;
 }
 export interface IGroupDialogState {
@@ -61,7 +65,7 @@ class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
     super(props);
     this.state = {
       open: props.open,
-      groupName: '',
+      groupName: "",
       owner: new User(),
       members: new Array<IUser>()
     };
@@ -80,7 +84,7 @@ class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
 
     this.props.onClose(groupModel);
     this.setState({
-      groupName: '',
+      groupName: "",
       owner: new User(),
       members: new Array<User>()
     });
@@ -134,12 +138,12 @@ class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
             value={this.state.owner}
             onChange={this.handleChange.bind(this)}
             inputProps={{
-              name: 'owner',
-              id: 'owner-select'
+              name: "owner",
+              id: "owner-select"
             }}
           />
           <InputLabel htmlFor="members-select">Members</InputLabel>
-          {users == null || users.length <= 0 ? (
+          {users == null || users.users.length <= 0 ? (
             <Typography variant="body1">NO USERS</Typography>
           ) : (
             <Select
@@ -149,15 +153,16 @@ class GroupDialog extends React.Component<GroupDialogProps, IGroupDialogState> {
               value={this.state.members}
               onChange={this.handleChange.bind(this)}
               inputProps={{
-                name: 'members',
-                id: 'members-select'
+                name: "members",
+                id: "members-select"
               }}
             >
-              {users.map(user => (
+              {users.users.map(user => (
                 <option
                   key={user.userName}
                   value={user.userName}
-                  style={getStyles(user, this)}>
+                  style={getStyles(user, this)}
+                >
                   {user.userName}
                 </option>
               ))}
