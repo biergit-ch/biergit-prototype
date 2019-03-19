@@ -3,10 +3,14 @@ import Group from './group.interface';
 
 const groupSchema = new mongoose.Schema({
   owner: {
-    ref: 'User',
     type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
   },
   groupName: String,
+  members: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+  }],
 });
   // TODO ADD members
 
