@@ -31,7 +31,10 @@ class GroupController implements Controller {
     response: express.Response,
     next: express.NextFunction,
   ) => {
-    const groups = await this.group.find();
+    const groups = await this.group
+      .find()
+      .populate('owner').populate('members')
+      .exec();
     response.send(groups);
   };
 
@@ -54,8 +57,7 @@ class GroupController implements Controller {
   private deleteUser = async (request: express.Request, response: express.Response) => {
     const groupId = request.params.id;
     await this.group.findOneAndDelete(groupId);
-    const users = await this.group.find();
-    response.send(users);
+    response.send();
   };
 }
 

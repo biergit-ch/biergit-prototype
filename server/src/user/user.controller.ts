@@ -54,8 +54,7 @@ class UserController implements Controller {
   private deleteUser = async (request: express.Request, response: express.Response) => {
     const userId = request.params.id;
     await this.user.findOneAndDelete(userId);
-    const users = await this.user.find();
-    response.send(users);
+    response.send();
   };
 }
 

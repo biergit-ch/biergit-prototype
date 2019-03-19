@@ -9,11 +9,9 @@ export default class UpdateGroupDto {
   @IsString()
   public groupName: string;
 
-  @ValidateNested()
   public owner: NewUserDto;
 
   @IsArray()
   @IsOptional()
-  @ValidateNested({ each: true })
   public members?: NewUserDto[];
 }
