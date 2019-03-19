@@ -1,4 +1,4 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   Button,
   withStyles,
   createStyles
-} from '@material-ui/core';
-import { blue } from '@material-ui/core/colors';
-import { User } from 'src/models';
+} from "@material-ui/core";
+import { blue } from "@material-ui/core/colors";
+import { User } from "src/models";
 
 const styles = createStyles({
   avatar: {
@@ -38,9 +38,9 @@ export class UserDialog extends React.Component<
     super(props, state);
     this.state = {
       open: props.open,
-      userName: '',
-      nickName: '',
-      email: ''
+      userName: "",
+      nickName: "",
+      email: ""
     };
   }
 
@@ -48,14 +48,19 @@ export class UserDialog extends React.Component<
     this.setState({ open: true });
   }
 
-  handleClose() {
-    let user = new User(
-      this.state.userName,
-      this.state.nickName,
-      this.state.email
-    );
-    this.props.onClose(user);
-    this.setState({ userName: '', nickName: '', email: '' });
+  handleClose = () => {
+    let user = null;
+    if (this.state && this.state.userName && this.state.email) {
+      user = new User(
+        this.state.userName,
+        this.state.nickName,
+        this.state.email
+      );
+    }
+    if (this.props) {
+      this.props.onClose(user);
+    }
+    this.setState({ userName: "", nickName: "", email: "" });
   }
 
   handleChange(e: any) {

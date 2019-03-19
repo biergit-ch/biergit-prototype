@@ -68,9 +68,11 @@ export const GroupList = withStyles(styles)(
         openGroupDialog: false
       });
       debugger;
-      GroupService.create(newGroup).then((createdGroup: IGroup) => {
-        this.props.actions.addGroup(createdGroup);
-      })
+      if(newGroup != null){
+        GroupService.create(newGroup).then((createdGroup: IGroup) => {
+          this.props.actions.addGroup(createdGroup);
+        })
+      }
     }
 
     render() {

@@ -1,5 +1,5 @@
-import * as React from 'react';
-import { UserDetail } from './UserDetail';
+import * as React from "react";
+import { UserDetail } from "./UserDetail";
 import {
   Typography,
   Grid,
@@ -9,18 +9,18 @@ import {
   createStyles,
   Paper,
   Button
-} from '@material-ui/core';
-import { UserDialog } from './UserDialog';
-import { IUser } from 'src/models';
-import { UserActions } from 'src/actions';
-import { IUserState } from 'src/reducers/state';
-import UserService from 'src/services/user';
+} from "@material-ui/core";
+import { UserDialog } from "./UserDialog";
+import { IUser } from "src/models";
+import { UserActions } from "src/actions";
+import { IUserState } from "src/reducers/state";
+import UserService from "src/services/user";
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap'
+      display: "flex",
+      flexWrap: "wrap"
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -35,7 +35,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary
     }
   });
@@ -75,9 +75,11 @@ export const UserList = withStyles(styles)(
       this.setState({
         openUserDialog: false
       });
-      UserService.create(user).then((user: IUser) => {
-        this.props.actions.addUser(user);
-      })
+      if (user != null) {
+        UserService.create(user).then((user: IUser) => {
+          this.props.actions.addUser(user);
+        });
+      }
     };
 
     render() {
