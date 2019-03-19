@@ -10,11 +10,12 @@ import {
   Paper,
   Button
 } from "@material-ui/core";
-import { UserDialog } from "./UserDialog";
+import { NewUserDialog } from "./NewUserDialog";
 import { IUser } from "src/models";
 import { UserActions } from "src/actions";
 import { IUserState } from "src/reducers/state";
 import UserService from "src/services/user";
+import { EditUserDialog } from "./EditUserDialog";
 
 const styles = (theme: Theme) =>
   createStyles({
@@ -41,7 +42,7 @@ const styles = (theme: Theme) =>
   });
 
 interface UserListState {
-  openUserDialog: boolean;
+  openNewUserDialog: boolean;
 }
 
 export interface UserListProps extends WithStyles<typeof styles> {
@@ -61,19 +62,19 @@ export const UserList = withStyles(styles)(
     constructor(props: UserListProps) {
       super(props);
       this.state = {
-        openUserDialog: false
+        openNewUserDialog: false
       };
     }
 
-    openUserDialog() {
+    openNewUserDialog() {
       this.setState({
-        openUserDialog: true
+        openNewUserDialog: true
       });
     }
 
     callback = (user: IUser) => {
       this.setState({
-        openUserDialog: false
+        openNewUserDialog: false
       });
       if (user != null) {
         UserService.create(user).then((user: IUser) => {
@@ -107,13 +108,20 @@ export const UserList = withStyles(styles)(
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Button variant="contained" onClick={() => this.openUserDialog()}>
+              <Button
+                variant="contained"
+                onClick={() => this.openNewUserDialog()}
+              >
                 ADD
               </Button>
             </Grid>
           </Grid>
-          <UserDialog
-            open={this.state.openUserDialog}
+          <NewUserDialog
+            open={this.state.openNewUserDialog}
+            onClose={this.callback}
+          />
+          <EditUserDialog
+            open={this.state.openEditUserDialog}
             onClose={this.callback}
           />
         </div>

@@ -30,7 +30,7 @@ export interface IUserDialogState {
   nickName: string;
   email: string;
 }
-export class UserDialog extends React.Component<
+export class NewUserDialog extends React.Component<
   UserDialogProps,
   IUserDialogState
 > {
@@ -121,4 +121,4 @@ export class UserDialog extends React.Component<
     );
   }
 }
-export default withStyles(styles as any)(UserDialog as any);
+export default withStyles(styles as any)(NewUserDialog as any);
