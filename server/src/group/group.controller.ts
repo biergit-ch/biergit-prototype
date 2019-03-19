@@ -33,7 +33,8 @@ class GroupController implements Controller {
   ) => {
     const groups = await this.group
       .find()
-      .populate('owner').populate('members')
+      .populate('owner')
+      .populate('members')
       .exec();
     response.send(groups);
   };
@@ -50,7 +51,8 @@ class GroupController implements Controller {
   private updateGroup = async (request: RequestWithGroup, response: express.Response) => {
     const groupId = request.params.id;
     const updateGroup: UpdateGroupDto = request.body;
-    const savedGroup = this.group.findOneAndUpdate(groupId, updateGroup);
+    const query = { _id: groupId };
+    const savedGroup = await this.group.findOneAndUpdate(query, updateGroup).exec();
     response.send(savedGroup);
   };
 

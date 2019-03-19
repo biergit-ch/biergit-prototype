@@ -11,7 +11,6 @@ export default class UpdateGroupDto {
 
   public owner: NewUserDto;
 
-  @IsArray()
   @IsOptional()
   public members?: NewUserDto[];
 }

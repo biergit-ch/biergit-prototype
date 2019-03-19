@@ -62,6 +62,8 @@ class App {
 
   private connectToTheDatabase() {
     const { MONGO_USER, MONGO_PASSWORD, MONGO_PATH } = process.env;
+    mongoose.set('useCreateIndex', true);
+    mongoose.set('useFindAndModify', false);
     mongoose.connect(`mongodb://${MONGO_USER}:${MONGO_PASSWORD}${MONGO_PATH}`, {
       useNewUrlParser: true,
     });
