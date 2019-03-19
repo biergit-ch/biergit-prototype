@@ -1,6 +1,6 @@
 import { IsOptional, IsString, ValidateNested } from 'class-validator';
 
-class CreateUserDto {
+export default class NewUserDto {
   @IsString()
   public userName: string;
 
@@ -11,5 +11,3 @@ class CreateUserDto {
   @IsString()
   public nickName: string;
 }
-
-export default CreateUserDto;

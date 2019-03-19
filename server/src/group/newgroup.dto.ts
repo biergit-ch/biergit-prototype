@@ -1,17 +1,15 @@
 import { IsOptional, IsString, ValidateNested, IsArray } from 'class-validator';
-import CreateUserDto from './../user/user.dto';
+import NewUserDto from '../user/newuser.dto';
 
-class CreateGroupDto {
+export default class NewGroupDto {
   @IsString()
   public groupName: string;
 
   @ValidateNested()
-  public owner: CreateUserDto;
+  public owner: NewUserDto;
 
   @IsArray()
   @IsOptional()
   @ValidateNested({ each: true })
-  public members?: CreateUserDto[];
+  public members?: NewUserDto[];
 }
-
-export default CreateGroupDto;
