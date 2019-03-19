@@ -72,7 +72,7 @@ export const GroupList = withStyles(styles)(
       });
       if (newGroup != null) {
         GroupService.create(newGroup).then((createdGroup: IGroup) => {
-          this.props.actions.addGroup(createdGroup);
+          this.props.actions.actionFetchGroups();
         });
       }
     };
