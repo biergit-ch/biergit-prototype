@@ -63,9 +63,10 @@ class EditGroupDialog extends React.Component<
   };
 
   handleChange(e: any) {
-    let change = {};
-    change[e.target.name] = e.target.value;
-    this.setState(change);
+    let group: any = {};
+    group = { ...this.state.group };
+    group[e.target.name] = e.target.value;
+    this.setState({ group: group });
   }
 
   handleOwnerSelectChange(event: any) {
@@ -102,7 +103,7 @@ class EditGroupDialog extends React.Component<
                 <TextField
                   autoFocus
                   margin="dense"
-                  name="group.groupName"
+                  name="groupName"
                   value={this.state.group.groupName}
                   onChange={this.handleChange.bind(this)}
                   label="Group Name"
