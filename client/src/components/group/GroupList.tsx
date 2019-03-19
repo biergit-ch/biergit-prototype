@@ -1,25 +1,28 @@
-import * as React from 'react';
+import * as React from "react";
 import {
-  Button,
   Typography,
   createStyles,
   Theme,
   WithStyles,
   withStyles,
   Grid,
-  Paper
-} from '@material-ui/core';
-import GroupDialog from './GroupDialog';
-import { IGroup } from './../../models';
-import { GroupActions } from './../../actions';
-import { IUserState, IGroupState } from 'src/reducers/state';
-import GroupService from 'src/services/group';
+  Paper,
+  List,
+  Fab
+} from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
+import NewGroupDialog from "./NewGroupDialog";
+import { IGroup } from "./../../models";
+import { GroupActions } from "./../../actions";
+import { IUserState, IGroupState } from "src/reducers/state";
+import GroupService from "src/services/group";
+import GroupDetail from "./GroupDetail";
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: 'flex',
-      flexWrap: 'wrap'
+      display: "flex",
+      flexWrap: "wrap"
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -34,7 +37,7 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: 'center',
+      textAlign: "center",
       color: theme.palette.text.secondary
     }
   });
@@ -67,17 +70,15 @@ export const GroupList = withStyles(styles)(
       this.setState({
         openGroupDialog: false
       });
-      debugger;
-      if(newGroup != null){
+      if (newGroup != null) {
         GroupService.create(newGroup).then((createdGroup: IGroup) => {
           this.props.actions.addGroup(createdGroup);
-        })
+        });
       }
-    }
+    };
 
     render() {
-      const { groups, users } = this.props;
-      const { classes } = this.props;
+      const { groups, users, classes, actions } = this.props;
       return (
         <div className={classes.root}>
           <Grid container spacing={24}>
@@ -91,29 +92,26 @@ export const GroupList = withStyles(styles)(
                 {groups == null || groups.groups.length <= 0 ? (
                   <Typography variant="body1">NO GROUPS</Typography>
                 ) : (
-                  <ul>
+                  <List>
                     {groups.groups.map((group, index) => (
-                      <li style={{ padding: '10px' }} key={index}>
-                        <span style={{ color: 'gray' }}> id: </span> {group._id}{' '}
-                        <br />
-                        <span style={{ color: 'gray' }}> name: </span>
-                        {group.groupName}
-                      </li>
+                      <GroupDetail
+                        key={index}
+                        group={group}
+                        actions={actions}
+                        users={users.users}
+                      />
                     ))}
-                  </ul>
+                  </List>
                 )}
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant="contained"
-                onClick={() => this.openGroupDialog()}
-              >
-                ADD
-              </Button>
+              <Fab onClick={() => this.openGroupDialog()}>
+                <AddIcon />
+              </Fab>
             </Grid>
           </Grid>
-          <GroupDialog
+          <NewGroupDialog
             open={this.state.openGroupDialog}
             onClose={this.callback}
             users={users}

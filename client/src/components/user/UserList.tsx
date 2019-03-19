@@ -8,8 +8,10 @@ import {
   Theme,
   createStyles,
   Paper,
-  Button
+  List,
+  Fab
 } from "@material-ui/core";
+import AddIcon from "@material-ui/icons/Add";
 import { NewUserDialog } from "./NewUserDialog";
 import { IUser } from "src/models";
 import { UserActions } from "src/actions";
@@ -43,6 +45,7 @@ const styles = (theme: Theme) =>
 
 interface UserListState {
   openNewUserDialog: boolean;
+  openEditUserDialog: boolean;
 }
 
 export interface UserListProps extends WithStyles<typeof styles> {
@@ -62,7 +65,8 @@ export const UserList = withStyles(styles)(
     constructor(props: UserListProps) {
       super(props);
       this.state = {
-        openNewUserDialog: false
+        openNewUserDialog: false,
+        openEditUserDialog: false
       };
     }
 
@@ -72,7 +76,13 @@ export const UserList = withStyles(styles)(
       });
     }
 
-    callback = (user: IUser) => {
+    openEditUserDialog() {
+      this.setState({
+        openEditUserDialog: true
+      });
+    }
+
+    callbackCreate = (user: IUser) => {
       this.setState({
         openNewUserDialog: false
       });
@@ -83,9 +93,19 @@ export const UserList = withStyles(styles)(
       }
     };
 
+    callbackEdit = (user: IUser) => {
+      this.setState({
+        openEditUserDialog: false
+      });
+      if (user != null) {
+        UserService.update(user).then((user: IUser) => {
+          this.props.actions.editUser(user);
+        });
+      }
+    };
+
     render() {
-      const { users } = this.props;
-      const { classes } = this.props;
+      const { users, classes, actions } = this.props;
       return (
         <div className={classes.root}>
           <Grid container spacing={24}>
@@ -99,30 +119,31 @@ export const UserList = withStyles(styles)(
                 {users == null || users.users.length <= 0 ? (
                   <Typography variant="body1">NO USERS</Typography>
                 ) : (
-                  <ul>
+                  <List>
                     {users.users.map(user => (
-                      <UserDetail user={user} key={user._id} />
+                      <UserDetail
+                        user={user}
+                        key={user._id}
+                        actions={actions}
+                      />
                     ))}
-                  </ul>
+                  </List>
                 )}
               </Paper>
             </Grid>
             <Grid item xs={12}>
-              <Button
-                variant="contained"
-                onClick={() => this.openNewUserDialog()}
-              >
-                ADD
-              </Button>
+              <Fab onClick={() => this.openNewUserDialog()}>
+                <AddIcon />
+              </Fab>
             </Grid>
           </Grid>
           <NewUserDialog
             open={this.state.openNewUserDialog}
-            onClose={this.callback}
+            onClose={this.callbackCreate}
           />
           <EditUserDialog
             open={this.state.openEditUserDialog}
-            onClose={this.callback}
+            onClose={this.callbackEdit}
           />
         </div>
       );

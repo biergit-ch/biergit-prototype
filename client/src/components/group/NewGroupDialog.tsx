@@ -30,22 +30,22 @@ const styles = (theme: Theme) =>
     }
   });
 
-export interface GroupDialogProps extends WithStyles<typeof styles> {
+export interface NewGroupDialogProps extends WithStyles<typeof styles> {
   open: boolean;
   users: IUserState;
   onClose: Function;
 }
-export interface IGroupDialogState {
+export interface NewGroupDialogState {
   open: boolean;
   groupName: string;
   owner: IUser;
   members: Array<IUser>;
 }
-class GroupDialog extends React.Component<
-  GroupDialogProps & WithStyles,
-  IGroupDialogState
+class NewGroupDialog extends React.Component<
+  NewGroupDialogProps & WithStyles,
+  NewGroupDialogState
 > {
-  constructor(props: GroupDialogProps, state: IGroupDialogState) {
+  constructor(props: NewGroupDialogProps, state: NewGroupDialogState) {
     super(props, state);
     this.state = {
       open: props.open,
@@ -180,5 +180,5 @@ class GroupDialog extends React.Component<
   }
 }
 export default withStyles(styles as any, { withTheme: true })(
-  GroupDialog as any
+  NewGroupDialog as any
 );

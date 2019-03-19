@@ -121,4 +121,4 @@ export class EditUserDialog extends React.Component<
     );
   }
 }
-export default withStyles(styles as any)(NewUserDialog as any);
+export default withStyles(styles as any)(EditUserDialog as any);
