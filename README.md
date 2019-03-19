@@ -48,8 +48,8 @@ Set HEROKU env vars:
 
 ## TODO
 
-- [Client](https://github.com/lucahost/biergit-prototype/projects/1)
-  - Authentication
-  - Mongoose Schemas
-- [API Specification](https://github.com/lucahost/biergit-prototype/projects/3)
-- [Alternative Backend (Java Spring)](https://github.com/lucahost/biergit-prototype/projects/2)
+- [x] [Client](https://github.com/lucahost/biergit-prototype/projects/1)
+  - [ ] Authentication
+  - [x] Mongoose Schemas
+- [ ] [API Specification](https://github.com/lucahost/biergit-prototype/projects/3)
+- [ ] [Alternative Backend (Java Spring)](https://github.com/lucahost/biergit-prototype/projects/2)
