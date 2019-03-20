@@ -11,19 +11,18 @@ import App from './containers/App/App';
 import { configureStore } from './store';
 import { WebAuthentication } from './auth';
 import { Provider } from 'react-redux';
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
+import customHistory from './utils/History';
 
 dotenv.config();
 
 const store = configureStore();
 const auth = new WebAuthentication();
-
 ReactDOM.render(
   <Provider store={store}>
-    {/* <Router history={history}> */}
-    <BrowserRouter>
+    <Router history={customHistory}>
       <App store={store} auth={auth} />,
-    </BrowserRouter>
+    </Router>
   </Provider>,
   document.getElementById('root') as HTMLElement
 );

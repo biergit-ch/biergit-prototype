@@ -109,7 +109,7 @@ export class WebAuthentication implements Auth0Authentication {
         this.setSession(result);
         history.replace('/home');
       } else if (e) {
-        history.replace('/home');
+        history.replace('/');
         // tslint:disable-next-line:no-console
         console.error(e);
         alert(`Error: ${e.error}. Check the console for further details.`);
@@ -145,7 +145,7 @@ export class WebAuthentication implements Auth0Authentication {
     localStorage.removeItem('expires_at');
     this.userProfile = null;
     // navigate to the home route
-    history.replace('/home');
+    history.replace('/');
   }
 
   /**

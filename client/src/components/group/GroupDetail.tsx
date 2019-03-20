@@ -1,5 +1,5 @@
-import * as React from "react";
-import { IGroup, IUser } from "src/models";
+import * as React from 'react';
+import { IGroup, IUser } from 'src/models';
 import {
   ListItem,
   ListItemAvatar,
@@ -14,28 +14,36 @@ import {
   createStyles,
   withStyles,
   Typography
-} from "@material-ui/core";
-import GroupIcon from "@material-ui/icons/Group";
-import DeleteIcon from "@material-ui/icons/Delete";
-import ExpandLess from "@material-ui/icons/ExpandLess";
-import ExpandMore from "@material-ui/icons/ExpandMore";
-import RemoveCircleIcon from "@material-ui/icons/RemoveCircle";
-import EditIcon from "@material-ui/icons/Edit";
-import PersonIcon from "@material-ui/icons/Person";
+} from '@material-ui/core';
+import GroupIcon from '@material-ui/icons/Group';
+import DeleteIcon from '@material-ui/icons/Delete';
+import ExpandLess from '@material-ui/icons/ExpandLess';
+import ExpandMore from '@material-ui/icons/ExpandMore';
+import RemoveCircleIcon from '@material-ui/icons/RemoveCircle';
+import EditIcon from '@material-ui/icons/Edit';
+import PersonIcon from '@material-ui/icons/Person';
 
-import GroupService from "src/services/group";
-import { GroupActions } from "src/actions";
-import EditGroupDialog from "./EditGroupDialog";
+import GroupService from 'src/services/group';
+import { GroupActions } from 'src/actions';
+import EditGroupDialog from './EditGroupDialog';
 
 const styles = (theme: Theme) =>
   createStyles({
     root: {
-      width: "100%",
+      width: '100%',
       maxWidth: 360,
       backgroundColor: theme.palette.background.paper
     },
     nested: {
       paddingLeft: theme.spacing.unit * 4
+    },
+    avatar: {
+      margin: 10
+    },
+    bigAvatar: {
+      margin: 10,
+      width: 60,
+      height: 60
     }
   });
 
@@ -105,13 +113,9 @@ class GroupDetail extends React.Component<GroupDetailProps, GroupDetailState> {
 
     return (
       <div>
-        <ListItem
-          style={{ padding: "10px" }}
-          button
-          onClick={() => this.handleClick()}
-        >
+        <ListItem button onClick={() => this.handleClick()}>
           <ListItemAvatar>
-            <Avatar>
+            <Avatar className={classes.avatar}>
               <GroupIcon />
             </Avatar>
           </ListItemAvatar>
@@ -138,7 +142,7 @@ class GroupDetail extends React.Component<GroupDetailProps, GroupDetailState> {
           {members == null || members.length <= 0 ? (
             <Typography variant="body1">NO USERS</Typography>
           ) : (
-            <List disablePadding component={"div" as any}>
+            <List disablePadding component={'div' as any}>
               {members.map((user: IUser) => (
                 <ListItem button className={classes.nested}>
                   <ListItemAvatar>

@@ -10,7 +10,8 @@ import { IUserState, IGroupState } from 'src/reducers/state';
 import { GroupActions, UserActions } from 'src/actions';
 import { bindActionCreators } from 'redux';
 import { omit } from 'src/utils';
-import { IUser, User } from 'src/models';
+import { IUser, User, UserProfile } from 'src/models';
+import UserService from 'src/services/user';
 
 export interface HomeProps extends RouteComponentProps<void> {
   auth: Auth0Authentication;
@@ -22,26 +23,23 @@ export interface HomeProps extends RouteComponentProps<void> {
 }
 interface HomeState {
   currentUser: IUser;
+  currentUserProfile: UserProfile;
 }
 
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps, state: HomeState) {
     super(props, state);
-    let user: any = {};
+    let emptyObj: any = {};
     this.state = {
-      currentUser: user
+      currentUser: emptyObj,
+      currentUserProfile: emptyObj
     };
   }
   componentDidMount() {
     if (this.props.auth != null) {
-      this.props.auth.getProfile().then(profile => {
+      this.props.auth.getProfile().then(userProfile => {
         this.setState({
-          currentUser: new User(
-            profile.name,
-            profile.nickname,
-            profile.email,
-            profile.picture
-          )
+          currentUserProfile: userProfile
         });
       });
     }
@@ -54,6 +52,50 @@ class Home extends React.Component<HomeProps, HomeState> {
       dispatch(UserActions.actionFetchUsers());
     }
   }
+
+  componentDidUpdate() {
+    if (this.state.currentUser) {
+      if (
+        Object.entries(this.state.currentUser).length === 0 &&
+        this.state.currentUser.constructor === Object
+      ) {
+        this.updateCurrentUser();
+      }
+    }
+  }
+
+  private updateCurrentUser() {
+    const { currentUserProfile } = this.state;
+    const { users } = this.props.users;
+    if (currentUserProfile && users && currentUserProfile.email) {
+      let user = users.find(u => u.email == currentUserProfile.email);
+      if (user) {
+        this.setState({
+          currentUser: user
+        });
+      } else {
+        if (this.props.users.state == 'LOADED') {
+          this.createNewUser(currentUserProfile);
+        }
+      }
+    }
+  }
+
+  private createNewUser(currentUserProfile: UserProfile) {
+    const user = new User(
+      currentUserProfile.name,
+      currentUserProfile.nickname,
+      currentUserProfile.email,
+      currentUserProfile.picture
+    );
+    this.setState({
+      currentUser: user
+    });
+    UserService.create(user).then(() => {
+      this.props.dispatch(UserActions.actionFetchUsers());
+    });
+  }
+
   render() {
     return (
       <div style={{ padding: 20 }}>

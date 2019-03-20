@@ -68,7 +68,6 @@ class UserDetail extends React.Component<UserDetailProps, UserDetailState> {
 
   render() {
     const { user, classes } = this.props;
-    console.log(user.pictureUrl);
     return (
       <div>
         <ListItem>
