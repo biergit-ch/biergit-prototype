@@ -30,8 +30,7 @@ class App extends React.Component<AppComponents> {
     const { auth } = this.props;
     return (
       <MuiThemeProvider theme={theme}>
-        {/* <Router history={history}> */}
-        <Route path="/" render={props => <AppNavBar auth={auth} />} />
+        <Route path="/" render={props => <AppNavBar auth={auth} {...props} />} />
       </MuiThemeProvider>
     );
   }

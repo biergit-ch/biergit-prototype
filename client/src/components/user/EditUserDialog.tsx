@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   Button,
   withStyles,
   createStyles
-} from "@material-ui/core";
-import { blue } from "@material-ui/core/colors";
-import { User } from "src/models";
+} from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+import { User, IUser } from 'src/models';
 
 const styles = createStyles({
   avatar: {
@@ -22,13 +22,12 @@ const styles = createStyles({
 
 export interface UserDialogProps {
   open: boolean;
+  user: IUser;
   onClose: Function;
 }
 export interface IUserDialogState {
   open: boolean;
-  userName: string;
-  nickName: string;
-  email: string;
+  user: IUser;
 }
 export class EditUserDialog extends React.Component<
   UserDialogProps,
@@ -38,9 +37,7 @@ export class EditUserDialog extends React.Component<
     super(props, state);
     this.state = {
       open: props.open,
-      userName: "",
-      nickName: "",
-      email: ""
+      user: props.user
     };
   }
 
@@ -49,24 +46,19 @@ export class EditUserDialog extends React.Component<
   }
 
   handleClose = () => {
-    let user = null;
-    if (this.state && this.state.userName && this.state.email) {
-      user = new User(
-        this.state.userName,
-        this.state.nickName,
-        this.state.email
-      );
+    if (this.state && this.state.user && this.state.user.userName) {
+      if (this.props) {
+        this.props.onClose(this.state.user);
+      }
     }
-    if (this.props) {
-      this.props.onClose(user);
-    }
-    this.setState({ userName: "", nickName: "", email: "" });
+    this.setState({ user: new User() });
   };
 
   handleChange(e: any) {
-    let change = {};
-    change[e.target.name] = e.target.value;
-    this.setState(change);
+    let user: any = {};
+    user = { ...this.state.user };
+    user[e.target.name] = e.target.value;
+    this.setState({ user: user });
   }
 
   render() {
@@ -85,7 +77,7 @@ export class EditUserDialog extends React.Component<
             autoFocus
             margin="dense"
             name="email"
-            value={this.state.email}
+            value={this.state.user.email}
             onChange={this.handleChange.bind(this)}
             label="Email Address"
             fullWidth
@@ -94,7 +86,7 @@ export class EditUserDialog extends React.Component<
             autoFocus
             margin="dense"
             name="userName"
-            value={this.state.userName}
+            value={this.state.user.userName}
             onChange={this.handleChange.bind(this)}
             label="Username"
             fullWidth
@@ -103,9 +95,18 @@ export class EditUserDialog extends React.Component<
             autoFocus
             margin="dense"
             name="nickName"
-            value={this.state.nickName}
+            value={this.state.user.nickName}
             onChange={this.handleChange.bind(this)}
             label="Nickname"
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            name="pictureUrl"
+            value={this.state.user.pictureUrl}
+            onChange={this.handleChange.bind(this)}
+            label="Profile Picture"
             fullWidth
           />
         </DialogContent>

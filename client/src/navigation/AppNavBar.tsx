@@ -12,8 +12,8 @@ import {
 } from '@material-ui/core';
 import HomeIcon from '@material-ui/icons/Home';
 import { Auth0Authentication } from 'src/auth/Auth0Authentication';
-import { Routes } from 'src/utils/Routes';
-import { Link } from 'react-router-dom';
+import { Routes } from 'src/navigation/Routes';
+import { Link, RouteComponentProps } from 'react-router-dom';
 
 const styles = createStyles({
   root: {
@@ -28,7 +28,9 @@ const styles = createStyles({
   }
 });
 
-export interface AppNavBarProps extends WithStyles<typeof styles> {
+export interface AppNavBarProps
+  extends RouteComponentProps<void>,
+    WithStyles<typeof styles> {
   auth: Auth0Authentication;
 }
 class AppNavBar extends React.Component<

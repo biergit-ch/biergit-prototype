@@ -5,6 +5,7 @@ export interface IUser {
   userName: string;
   nickName: string;
   email: string;
+  pictureUrl: string;
 }
 
 export class User implements IUser {
@@ -12,10 +13,12 @@ export class User implements IUser {
   userName: string;
   nickName: string;
   email: string;
+  pictureUrl: string;
 
-  constructor(userName?: string, nickName?: string, email?: string) {
+  constructor(userName?: string, nickName?: string, email?: string, pictureUrl?: string) {
     this.userName = userName || '';
     this.nickName = nickName || '';
     this.email = email || '';
+    this.pictureUrl = pictureUrl || '';
   }
 }

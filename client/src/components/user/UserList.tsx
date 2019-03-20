@@ -1,5 +1,4 @@
-import * as React from "react";
-import { UserDetail } from "./UserDetail";
+import * as React from 'react';
 import {
   Typography,
   Grid,
@@ -10,20 +9,20 @@ import {
   Paper,
   List,
   Fab
-} from "@material-ui/core";
-import AddIcon from "@material-ui/icons/Add";
-import { NewUserDialog } from "./NewUserDialog";
-import { IUser } from "src/models";
-import { UserActions } from "src/actions";
-import { IUserState } from "src/reducers/state";
-import UserService from "src/services/user";
-import { EditUserDialog } from "./EditUserDialog";
+} from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import { NewUserDialog } from './NewUserDialog';
+import { IUser } from 'src/models';
+import { UserActions } from 'src/actions';
+import { IUserState } from 'src/reducers/state';
+import UserService from 'src/services/user';
+import UserDetail from './UserDetail';
 
 const styles = (theme: Theme) =>
   createStyles({
     container: {
-      display: "flex",
-      flexWrap: "wrap"
+      display: 'flex',
+      flexWrap: 'wrap'
     },
     textField: {
       marginLeft: theme.spacing.unit,
@@ -38,14 +37,13 @@ const styles = (theme: Theme) =>
     },
     paper: {
       padding: theme.spacing.unit * 2,
-      textAlign: "center",
+      textAlign: 'center',
       color: theme.palette.text.secondary
     }
   });
 
 interface UserListState {
   openNewUserDialog: boolean;
-  openEditUserDialog: boolean;
 }
 
 export interface UserListProps extends WithStyles<typeof styles> {
@@ -65,20 +63,13 @@ export const UserList = withStyles(styles)(
     constructor(props: UserListProps) {
       super(props);
       this.state = {
-        openNewUserDialog: false,
-        openEditUserDialog: false
+        openNewUserDialog: false
       };
     }
 
     openNewUserDialog() {
       this.setState({
         openNewUserDialog: true
-      });
-    }
-
-    openEditUserDialog() {
-      this.setState({
-        openEditUserDialog: true
       });
     }
 
@@ -89,17 +80,6 @@ export const UserList = withStyles(styles)(
       if (user != null) {
         UserService.create(user).then((user: IUser) => {
           this.props.actions.addUser(user);
-        });
-      }
-    };
-
-    callbackEdit = (user: IUser) => {
-      this.setState({
-        openEditUserDialog: false
-      });
-      if (user != null) {
-        UserService.update(user).then((user: IUser) => {
-          this.props.actions.editUser(user);
         });
       }
     };
@@ -140,10 +120,6 @@ export const UserList = withStyles(styles)(
           <NewUserDialog
             open={this.state.openNewUserDialog}
             onClose={this.callbackCreate}
-          />
-          <EditUserDialog
-            open={this.state.openEditUserDialog}
-            onClose={this.callbackEdit}
           />
         </div>
       );

@@ -4,7 +4,7 @@ import { Redirect } from 'react-router';
 import { Profile, Admin, Welcome } from '../components';
 import { Callback } from '../components';
 import { Auth0Authentication } from 'src/auth/Auth0Authentication';
-import Home from './../components/home/Home';
+import Home from '../components/home/Home';
 
 export interface RouterProps {
   auth: Auth0Authentication;
@@ -28,7 +28,6 @@ export class Routes extends React.Component<RouterProps> {
           <Route path="/" render={() => <Welcome />} />
           <Route
             path="/home"
-            auth={this.props.auth}
             render={(routerProps: any) =>
               !authenticated ? (
                 <Redirect to="/" />

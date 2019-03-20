@@ -34,17 +34,16 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
   componentDidMount() {
     if (this.props.auth != null) {
-      this.props.auth.getProfile().then((profile) => {
-        debugger;
+      this.props.auth.getProfile().then(profile => {
         this.setState({
           currentUser: new User(
             profile.name,
             profile.nickname,
-            profile.email
+            profile.email,
+            profile.picture
           )
         });
       });
-     
     }
     if (this.props.groups.state === 'INIT') {
       const { dispatch } = this.props;
