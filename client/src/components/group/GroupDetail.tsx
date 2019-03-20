@@ -146,9 +146,17 @@ class GroupDetail extends React.Component<GroupDetailProps, GroupDetailState> {
               {members.map((user: IUser) => (
                 <ListItem button className={classes.nested}>
                   <ListItemAvatar>
-                    <Avatar>
-                      <PersonIcon />
-                    </Avatar>
+                    {user.pictureUrl ? (
+                      <Avatar
+                        alt="PersonIcon"
+                        src={user.pictureUrl}
+                        className={classes.avatar}
+                      />
+                    ) : (
+                      <Avatar className={classes.avatar}>
+                        <PersonIcon />
+                      </Avatar>
+                    )}
                   </ListItemAvatar>
                   <ListItemText primary={user.userName} secondary={user._id} />
                   <ListItemSecondaryAction>
