@@ -79,7 +79,7 @@ export const UserList = withStyles(styles)(
       });
       if (user != null) {
         UserService.create(user).then((user: IUser) => {
-          this.props.actions.addUser(user);
+          this.props.actions.actionFetchUsers();
         });
       }
     };

@@ -60,8 +60,8 @@ class UserDetail extends React.Component<UserDetailProps, UserDetailState> {
       openEditUserDialog: false
     });
     if (user != null) {
-      UserService.update(user).then((user: IUser) => {
-        this.props.actions.editUser(user);
+      UserService.update(user).then(() => {
+        this.props.actions.actionFetchUsers();
       });
     }
   };
