@@ -1,15 +1,16 @@
-import * as React from "react";
-import { Auth0Authentication } from "../../auth/Auth0Authentication";
-import { Grid, Paper } from "@material-ui/core";
-import { UserList } from "../user/UserList";
-import { GroupList } from "../group/GroupList";
-import { AppState } from "./../../reducers";
-import { connect } from "react-redux";
-import { RouteComponentProps } from "react-router";
-import { IUserState, IGroupState } from "src/reducers/state";
+import * as React from 'react';
+import { Auth0Authentication } from '../../auth/Auth0Authentication';
+import { Grid, Paper } from '@material-ui/core';
+import { UserList } from '../user/UserList';
+import { GroupList } from '../group/GroupList';
+import { AppState } from './../../reducers';
+import { connect } from 'react-redux';
+import { RouteComponentProps } from 'react-router';
+import { IUserState, IGroupState } from 'src/reducers/state';
 import { GroupActions, UserActions } from 'src/actions';
 import { bindActionCreators } from 'redux';
 import { omit } from 'src/utils';
+import { IUser, User } from 'src/models';
 
 export interface HomeProps extends RouteComponentProps<void> {
   auth: Auth0Authentication;
@@ -19,22 +20,38 @@ export interface HomeProps extends RouteComponentProps<void> {
   userActions: UserActions;
   groupActions: GroupActions;
 }
-interface HomeState {}
+interface HomeState {
+  currentUser: IUser;
+}
 
 class Home extends React.Component<HomeProps, HomeState> {
   constructor(props: HomeProps, state: HomeState) {
     super(props, state);
+    let user: any = {};
     this.state = {
-      
-    }
+      currentUser: user
+    };
   }
   componentDidMount() {
-    if (this.props.groups.state === "INIT") {
-      const { dispatch } = this.props
+    if (this.props.auth != null) {
+      this.props.auth.getProfile().then((profile) => {
+        debugger;
+        this.setState({
+          currentUser: new User(
+            profile.name,
+            profile.nickname,
+            profile.email
+          )
+        });
+      });
+     
+    }
+    if (this.props.groups.state === 'INIT') {
+      const { dispatch } = this.props;
       dispatch(GroupActions.actionFetchGroups());
     }
-    if (this.props.users.state === "INIT") {
-      const { dispatch } = this.props
+    if (this.props.users.state === 'INIT') {
+      const { dispatch } = this.props;
       dispatch(UserActions.actionFetchUsers());
     }
   }
@@ -61,21 +78,21 @@ class Home extends React.Component<HomeProps, HomeState> {
   }
 
   renderUsers() {
-    if (this.props.users.state === "LOADING") {
+    if (this.props.users.state === 'LOADING') {
       return <p>Loading ...</p>;
-    } else if (this.props.users.state === "ERROR") {
+    } else if (this.props.users.state === 'ERROR') {
       return <p>Error:</p>;
-    } else if (this.props.users.state === "LOADED") {
+    } else if (this.props.users.state === 'LOADED') {
       return (
         <UserList
-          name="CurrentUser"
+          name={this.state.currentUser.nickName}
           openDialog="false"
           actions={this.props.userActions}
           users={this.props.users}
         />
       );
     } else {
-      return "Init State";
+      return 'Init State';
     }
   }
 }
@@ -91,8 +108,8 @@ function mapStateToProps(state: AppState, ownProps: HomeProps) {
 function mapDispatchToProps(dispatch: any) {
   return {
     dispatch,
-    groupActions: bindActionCreators(omit(GroupActions, "Type"), dispatch),
-    userActions: bindActionCreators(omit(UserActions, "Type"), dispatch)
+    groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch),
+    userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch)
   };
 }
 

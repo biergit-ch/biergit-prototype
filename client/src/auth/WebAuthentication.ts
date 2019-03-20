@@ -36,7 +36,7 @@ export class WebAuthentication implements Auth0Authentication {
    * @private
    * @memberof WebAuthentication
    */
-  requestedScopes = 'openid profile read:messages write:messages';
+  requestedScopes = 'openid profile email read:messages write:messages';
 
   /**
    * @property
@@ -80,12 +80,12 @@ export class WebAuthentication implements Auth0Authentication {
    * @memberof WebAuthentication
    */
   @autobind
-  getProfile(): Promise<UserProfile> {
+  getProfile(): Promise<any> {
     return new Promise((resolve, reject) => {
       let accessToken = this.accessToken;
       this.auth0.client.userInfo(
         accessToken,
-        (error: Auth0Error, profile: UserProfile) => {
+        (error: Auth0Error, profile: any) => {
           if (error) {
             reject(error);
           } else {

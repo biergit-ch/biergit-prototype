@@ -27,11 +27,12 @@ const styles = createStyles({
     marginRight: 20
   }
 });
-export interface AppProps extends WithStyles<typeof styles> {
+
+export interface AppNavBarProps extends WithStyles<typeof styles> {
   auth: Auth0Authentication;
 }
 class AppNavBar extends React.Component<
-  AppProps & WithStyles<keyof typeof styles>
+  AppNavBarProps & WithStyles<keyof typeof styles>
 > {
   appLink = (props: any) => <Link to="/" {...props} />;
   homeLink = (props: any) => <Link to="/home" {...props} />;
@@ -70,12 +71,20 @@ class AppNavBar extends React.Component<
               >
                 Biergit Prototype App
               </Typography>
-              {authenticated && <Button color="inherit" component={this.homeLink}>Home</Button>}
               {authenticated && (
-                <Button color="inherit" component={this.profileLink}>Profile</Button>
+                <Button color="inherit" component={this.homeLink}>
+                  Home
+                </Button>
               )}
               {authenticated && (
-                <Button color="inherit" component={this.adminLink}>Admin</Button>
+                <Button color="inherit" component={this.profileLink}>
+                  Profile
+                </Button>
+              )}
+              {authenticated && (
+                <Button color="inherit" component={this.adminLink}>
+                  Admin
+                </Button>
               )}
               {!authenticated && (
                 <Button color="inherit" onClick={this.login.bind(this)}>
@@ -93,31 +102,12 @@ class AppNavBar extends React.Component<
 
         <Grid container spacing={24} justify="center" style={{ padding: 20 }}>
           <Grid item xs={12}>
-            <Routes auth={this.props.auth}/>
+            <Routes auth={this.props.auth} />
           </Grid>
         </Grid>
       </div>
     );
   }
 }
-
-// export interface AppProps extends WithStyles<typeof styles> {
-//   auth: Auth0Authentication;
-//   userActions: UserActions;
-//   groupActions: GroupActions;
-// }
-
-// const mapStateToProps = (state: AppState) => ({
-//   authenticated: state.authenticated,
-//   users: state.users,
-//   groups: state.groups
-// });
-
-// const mapDispatchtoProps = (
-//   dispatch: Dispatch
-// ): Pick<AppProps, 'userActions' | 'groupActions'> => ({
-//   userActions: bindActionCreators(omit(UserActions, 'Type'), dispatch),
-//   groupActions: bindActionCreators(omit(GroupActions, 'Type'), dispatch)
-// });
 
 export default withStyles(styles as any, { withTheme: true })(AppNavBar as any);

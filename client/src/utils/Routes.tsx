@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Redirect, Route } from 'react-router';
+import { Route } from 'react-router-dom';
+import { Redirect } from 'react-router';
 import { Profile, Admin, Welcome } from '../components';
 import { Callback } from '../components';
 import { Auth0Authentication } from 'src/auth/Auth0Authentication';
@@ -20,20 +21,21 @@ export class Routes extends React.Component<RouterProps> {
   }
   render() {
     const { authenticated, userHasScopes } = this.props.auth;
+    const properties: any = this.props.auth;
     return (
       <div>
         <main role="main">
           <Route path="/" render={() => <Welcome />} />
           <Route
             path="/home"
-            // render={props =>
-            //   !authenticated ? (
-            //     <Redirect to="/" />
-            //   ) : (
-            //     <Home auth={this.props.auth} {...props} />
-            //   )
-            // }
-            component={Home}
+            auth={this.props.auth}
+            render={(routerProps: any) =>
+              !authenticated ? (
+                <Redirect to="/" />
+              ) : (
+                <Home auth={properties} {...routerProps} />
+              )
+            }
           />
           <Route
             path="/profile"
