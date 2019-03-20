@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Dialog,
   DialogTitle,
@@ -9,9 +9,9 @@ import {
   Button,
   withStyles,
   createStyles
-} from "@material-ui/core";
-import { blue } from "@material-ui/core/colors";
-import { User } from "src/models";
+} from '@material-ui/core';
+import { blue } from '@material-ui/core/colors';
+import { User } from 'src/models';
 
 const styles = createStyles({
   avatar: {
@@ -29,6 +29,7 @@ export interface IUserDialogState {
   userName: string;
   nickName: string;
   email: string;
+  pictureUrl: string;
 }
 export class NewUserDialog extends React.Component<
   UserDialogProps,
@@ -38,9 +39,10 @@ export class NewUserDialog extends React.Component<
     super(props, state);
     this.state = {
       open: props.open,
-      userName: "",
-      nickName: "",
-      email: ""
+      userName: '',
+      nickName: '',
+      email: '',
+      pictureUrl: ''
     };
   }
 
@@ -54,14 +56,15 @@ export class NewUserDialog extends React.Component<
       user = new User(
         this.state.userName,
         this.state.nickName,
-        this.state.email
+        this.state.email,
+        this.state.pictureUrl
       );
     }
     if (this.props) {
       this.props.onClose(user);
     }
-    this.setState({ userName: "", nickName: "", email: "" });
-  }
+    this.setState({ userName: '', nickName: '', email: '', pictureUrl: '' });
+  };
 
   handleChange(e: any) {
     let change = {};
@@ -106,6 +109,15 @@ export class NewUserDialog extends React.Component<
             value={this.state.nickName}
             onChange={this.handleChange.bind(this)}
             label="Nickname"
+            fullWidth
+          />
+          <TextField
+            autoFocus
+            margin="dense"
+            name="pictureUrl"
+            value={this.state.pictureUrl}
+            onChange={this.handleChange.bind(this)}
+            label="Profile Picture"
             fullWidth
           />
         </DialogContent>
