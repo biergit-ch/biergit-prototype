@@ -58,7 +58,8 @@ class GroupController implements Controller {
 
   private deleteUser = async (request: express.Request, response: express.Response) => {
     const groupId = request.params.id;
-    await this.group.findOneAndDelete(groupId);
+    const query = { _id: groupId };
+    await this.group.findOneAndDelete(query);
     response.send();
   };
 }

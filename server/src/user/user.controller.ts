@@ -19,11 +19,7 @@ class UserController implements Controller {
     this.router.get(`${this.path}/`, this.listUsers);
     this.router.post(`${this.path}/`, validationMiddleware(CreateUserDto, true), this.createUser);
     this.router.put(`${this.path}/:id`, validationMiddleware(CreateUserDto, true), this.updateUser);
-    this.router.delete(
-      `${this.path}/:id`,
-      validationMiddleware(CreateUserDto, true),
-      this.deleteUser,
-    );
+    this.router.delete(`${this.path}/:id`, this.deleteUser);
   }
 
   private listUsers = async (
@@ -47,13 +43,15 @@ class UserController implements Controller {
   private updateUser = async (request: RequestWithUser, response: express.Response) => {
     const userId = request.params.id;
     const updatedUser: UpdateUserDto = request.body;
-    const savedUser = this.user.findOneAndUpdate(userId, updatedUser);
+    const query = { _id: userId };
+    const savedUser = await this.user.findOneAndUpdate(query, updatedUser).exec();
     response.send(savedUser);
   };
 
   private deleteUser = async (request: express.Request, response: express.Response) => {
     const userId = request.params.id;
-    await this.user.findOneAndDelete(userId);
+    const query = { _id: userId };
+    await this.user.findOneAndDelete(query);
     response.send();
   };
 }

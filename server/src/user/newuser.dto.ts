@@ -10,4 +10,8 @@ export default class NewUserDto {
   @IsOptional()
   @IsString()
   public nickName: string;
+
+  @IsOptional()
+  @IsString()
+  public pictureUrl: string;
 }

@@ -14,4 +14,8 @@ export default class UpdateUserDto {
   @IsOptional()
   @IsString()
   public nickName: string;
+
+  @IsOptional()
+  @IsString()
+  public pictureUrl: string;
 }
