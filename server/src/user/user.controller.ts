@@ -17,11 +17,24 @@ class UserController implements Controller {
 
   private initializeRoutes() {
     this.router.get(`${this.path}/`, this.listUsers);
+
     this.router.post(`${this.path}/`, validationMiddleware(CreateUserDto, true), this.createUser);
     this.router.put(`${this.path}/:id`, validationMiddleware(CreateUserDto, true), this.updateUser);
     this.router.delete(`${this.path}/:id`, this.deleteUser);
   }
-
+  /**
+   * @swagger
+   * /api/user:
+   *   get:
+   *     description: Returns users
+   *     tags:
+   *      - Users
+   *     produces:
+   *      - application/json
+   *     responses:
+   *       200:
+   *         description: users
+   */
   private listUsers = async (
     request: express.Request,
     response: express.Response,
@@ -30,7 +43,22 @@ class UserController implements Controller {
     const users = await this.user.find();
     response.send(users);
   };
-
+  /**
+   * @swagger
+   * /api/user:
+   *   post:
+   *     description: Returns users
+   *     tags: [User]
+   *     produces:
+   *       - application/json
+   *     parameters:
+   *       - $ref: '#/parameters/userName'
+   *       - $ref: '#/parameters/nickName'
+   *       - $ref: '#/parameters/email'
+   *     responses:
+   *       200:
+   *         description: users
+   */
   private createUser = async (request: RequestWithUser, response: express.Response) => {
     const createUserDto: CreateUserDto = request.body;
     const createUser = new this.user({
